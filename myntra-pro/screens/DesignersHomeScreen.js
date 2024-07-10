@@ -4,10 +4,13 @@ import { View, Text, StyleSheet, TouchableOpacity ,Image} from 'react-native';
 function DesignerHomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
+      <View style ={styles.header}>
       <View style={styles.logoImage}>
         <Image 
         source={require('../assets/logo.png')}
         style ={styles.logo} />
+      </View>
+      <Text style ={styles.designerText} >Welcome,</Text>
       </View>
       <View style={styles.frontImageContainer}>
         <Image 
@@ -38,23 +41,21 @@ function DesignerHomeScreen({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
+
   icon:{
 
   },
 
   logoImage:{
-    position:'absolute',
-    top:10,
-    left:20
-
+    alignItems:"flex-start",
+    paddingStart: 5
   },
 
-
   imageView:{
-    width: 350,
-    height: 200,
-    resizeMode: 'contain',
-    resizeMode:'stretch'
+    width: 345,
+    height: 240,
+    resizeMode: 'stretch',
+   borderColor:'black'
 
   },
   container: {
@@ -81,8 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     marginHorizontal: 10,
-    borderRadius: 10,
-    elevation: 5,
+    
   },
   boxText: {
     color: 'gray',
@@ -101,9 +101,42 @@ const styles = StyleSheet.create({
   },
 
   frontImageContainer:{
-    marginBottom:30,
+    marginBottom:20,
     borderRadius: 20,
+    marginTop:20,
+    borderWidth: 4,
+    borderColor: 'gray',
+    overflow: 'hidden',
+    borderRadius: 14,
+    elevation: 10,
+    shadowColor:'#00000f',
+    shadowRadius:12,
+    width: 350,
+    height:240,
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  designerText:{
+    fontSize:25,
+    fontStyle:'normal',
+    fontWeight:'bold',
+    marginStart: 70,
+    paddingTop:5,
+    paddingEnd:125,
    
+
+
+
+  },
+  header:{
+    flexDirection:'row',
+    borderWidth: 1,
+    borderColor: 'gray',
+    overflow: 'visible',
+    borderRadius: 14,
+    padding: 2,
+    alignSelf:'center'
+    
     
   }
 });

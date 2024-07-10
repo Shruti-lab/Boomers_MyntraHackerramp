@@ -4,7 +4,7 @@ import { View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity } fr
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-        <View style ={styles.images}>
+        
         <View style={styles.imageContainer}>
             <Image
             source = {require('../assets/logo.png')}
@@ -18,7 +18,7 @@ function HomeScreen({ navigation }) {
                 />
             
         </View>
-        </View>
+      
      
      
       <View style ={styles.customer}>
@@ -44,19 +44,12 @@ function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    images: {
-        position:'absolute',
-        top: 20,
-        left: 20,
-        marginBottom: 30
-
-    },
-
+    
     customer:{
         flexDirection: 'row',
         marginBottom: 20,
         width: '170',
-        marginTop: 100
+        marginTop: 10
     },
 
     buttonCustomer: {
@@ -79,6 +72,10 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     imageContainer: {
+        position:'absolute',
+        left: 20,
+        top: 10,
+        marginBottom: 0
      
       },
       logo: {
@@ -126,3 +123,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

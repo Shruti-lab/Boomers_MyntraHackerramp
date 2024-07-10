@@ -4,6 +4,7 @@ import { View, Text, Button, TextInput, StyleSheet, Image } from 'react-native';
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
+        <View style ={styles.images}>
         <View style={styles.imageContainer}>
             <Image
             source = {require('../assets/logo.png')}
@@ -17,6 +18,8 @@ function HomeScreen({ navigation }) {
                 />
             
         </View>
+        </View>
+     
      
       <View style ={styles.customer}>
       <Button color="#ff4455" title ="Customer" style={styles.buttonCustomer} />
@@ -36,30 +39,31 @@ function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    images: {
+        position:'absolute',
+        top: 20,
+        left: 20,
+        marginBottom: 30
+
+    },
     customer:{
-        marginBottom: 10,
+        marginBottom: 20,
         color:"red",
-        width: 170
+        width: 170,
+        marginTop: 100
     },
     buttonCustomer:{
         color:"red",
         borderColor:"black"
     },
     
-    frontImageContainer:{
-        marginTop:0,
-      
-        
-    },
     frontImage:{
         width: 400,
         height: 200,
         resizeMode: 'contain',
     },
     imageContainer: {
-        position: 'absolute',
-        top: 20,
-        left: 20,
+     
       },
       logo: {
         width: 50,

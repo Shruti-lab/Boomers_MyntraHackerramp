@@ -51,9 +51,10 @@ const styles = StyleSheet.create({
 
 
   imageView:{
-    width: 400,
+    width: 350,
     height: 200,
     resizeMode: 'contain',
+    resizeMode:'stretch'
 
   },
   container: {
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   frontImageContainer:{
     marginBottom:30,
     borderRadius: 20,
-    elevation:5
+   
     
   }
 });

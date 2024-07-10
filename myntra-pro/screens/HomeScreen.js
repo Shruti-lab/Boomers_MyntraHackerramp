@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 function HomeScreen({ navigation }) {
   return (
@@ -22,17 +22,22 @@ function HomeScreen({ navigation }) {
      
      
       <View style ={styles.customer}>
-      <Button color="#ff4455" title ="Customer" style={styles.buttonCustomer} />
+      <TouchableOpacity style={styles.buttonCustomer} onPress={() => console.log('Customer pressed')}>
+      <Button color="#ff4468" title ="Customer" style={styles.buttonCustomer} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonDesigner} onPress={() => console.log('Designer pressed')}>
+        <Button color="#ff4468" title ="Designer" style={styles.buttonCustomer} />
+        </TouchableOpacity> 
       </View>
     
       <TextInput placeholder="Email" style={styles.input} />
       <TextInput placeholder="Password" secureTextEntry style={styles.input} />
       <View style={styles.buttonContainer}>
-        <Button color="#ff4455" title="Login" onPress={() => navigation.navigate('Design')} />
+        <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('Design')} />
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>
-      <Button color="#ff4455" title="Register" onPress={() => navigation.navigate('Register')} />
+      <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('Register')} />
       </View>
     </View>
   );
@@ -46,16 +51,27 @@ const styles = StyleSheet.create({
         marginBottom: 30
 
     },
+
     customer:{
+        flexDirection: 'row',
         marginBottom: 20,
-        color:"red",
-        width: 170,
+        width: '170',
         marginTop: 100
     },
-    buttonCustomer:{
-        color:"red",
-        borderColor:"black"
-    },
+
+    buttonCustomer: {
+        // Background color of Customer button
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginRight: 10,
+         // Adjust spacing between buttons
+      },
+      buttonDesigner: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+      },
     
     frontImage:{
         width: 400,

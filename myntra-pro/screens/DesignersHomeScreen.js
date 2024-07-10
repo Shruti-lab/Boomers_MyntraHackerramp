@@ -78,10 +78,13 @@ const styles = StyleSheet.create({
   box: {
     width: 150,
     height: 150,
-    paddingTop: 30,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     marginHorizontal: 10,
+    borderRadius: 10,
+    elevation: 5,
+    padding: 2,
     
   },
   boxText: {
@@ -108,6 +111,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     overflow: 'hidden',
     borderRadius: 14,
+    shadowOpacity:50,
+    shadowOffset:50,
     elevation: 10,
     shadowColor:'#00000f',
     shadowRadius:12,
@@ -124,9 +129,6 @@ const styles = StyleSheet.create({
     paddingTop:5,
     paddingEnd:125,
    
-
-
-
   },
   header:{
     flexDirection:'row',

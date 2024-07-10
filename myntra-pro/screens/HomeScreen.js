@@ -33,7 +33,7 @@ function HomeScreen({ navigation }) {
       <TextInput placeholder="Email" style={styles.input} />
       <TextInput placeholder="Password" secureTextEntry style={styles.input} />
       <View style={styles.buttonContainer}>
-        <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('Design')} />
+        <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('DesignersHome')} />
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>
@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
         height: 200,
         resizeMode: 'contain',
     },
+
+    frontImageContainer:{
+        marginTop: 40,
+    },
     imageContainer: {
         position:'absolute',
         left: 20,
@@ -85,7 +89,6 @@ const styles = StyleSheet.create({
       },
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor:"white"

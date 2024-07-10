@@ -1,28 +1,97 @@
 import React from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-function RegisterScreen({ navigation }) {
+function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Register</Text>
+        
+        <View style={styles.imageContainer}>
+            <Image
+            source = {require('../assets/logo.png')}
+            style ={styles.logo}
+            />
+        </View>
+        <View style={styles.frontImageContainer}>
+            <Image
+            source={require('../assets/frontPage.png')}
+                style={styles.frontImage}
+                />
+            
+        </View>
+      
+     
+     
+      <View style ={styles.customer}>
+      <TouchableOpacity style={styles.buttonCustomer} onPress={() => console.log('Customer pressed')}>
+      <Button color="#ff4468" title ="Customer" style={styles.buttonCustomer} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonDesigner} onPress={() => console.log('Designer pressed')}>
+        <Button color="#ff4468" title ="Designer" style={styles.buttonCustomer} />
+        </TouchableOpacity> 
+      </View>
+    
       <TextInput placeholder="Email" style={styles.input} />
-      <TextInput placeholder="Password" secureTextEntry style={styles.input} />
+      <TextInput placeholder="Create Password" secureTextEntry style={styles.input} />
       <TextInput placeholder="Confirm Password" secureTextEntry style={styles.input} />
       <View style={styles.buttonContainer}>
-        <Button title="Register" onPress={() => navigation.navigate('Home')} />
+        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('Home')} />
       </View>
-      <Text style={styles.textSmall}>Already have an account?</Text>
-      <Button title="Login" onPress={() => navigation.navigate('Home')} />
+      <Text style={styles.textSmall}>Don't have an account?</Text>
+      <View style={styles.registerButton}>
+      <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('Home')} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+    frontImageContainer:{
+        marginTop: 40,
+    },
+    
+    customer:{
+        flexDirection: 'row',
+        marginBottom: 20,
+        width: '170',
+        marginTop: 10
+    },
+
+    buttonCustomer: {
+        // Background color of Customer button
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginRight: 10,
+         // Adjust spacing between buttons
+      },
+      buttonDesigner: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+      },
+    
+    frontImage:{
+        width: 400,
+        height: 200,
+        resizeMode: 'contain',
+    },
+    imageContainer: {
+        position:'absolute',
+        left: 20,
+        top: 10,
+        marginBottom: 0
+     
+      },
+      logo: {
+        width: 50,
+        height: 50,
+        resizeMode: 'contain',
+      },
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    padding: 20,
+    backgroundColor:"white"
   },
   text: {
     fontSize: 30,
@@ -49,7 +118,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginVertical: 10,
     width: '80%'
+  },
+  registerButton:{
+    marginTop: 10,
+    width: '80%'
   }
 });
 
-export default RegisterScreen;
+export default HomeScreen;
+

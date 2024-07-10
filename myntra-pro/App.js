@@ -1,10 +1,9 @@
-// App.js
 import * as React from 'react';
+import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import DesignScreen from './screens/DesignScreen';
 import DesignersScreen from './screens/DesignersScreen';
@@ -17,7 +16,6 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Design" component={DesignScreen} />
         <Stack.Screen name="Designers" component={DesignersScreen} />

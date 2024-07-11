@@ -34,11 +34,11 @@ function HomeScreen({ navigation }) {
       <TextInput placeholder="Create Password" secureTextEntry style={styles.input} />
       <TextInput placeholder="Confirm Password" secureTextEntry style={styles.input} />
       <View style={styles.buttonContainer}>
-        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('Home')} />
+        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('Login')} />
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>
-      <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('Home')} />
+      <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('Login')} />
       </View>
     </View>
   );

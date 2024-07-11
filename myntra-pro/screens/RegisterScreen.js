@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-function HomeScreen({ navigation }) {
+function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container}>
         
@@ -71,9 +71,9 @@ const styles = StyleSheet.create({
       },
     
     frontImage:{
-        width: 400,
-        height: 200,
-        resizeMode: 'contain',
+        width: 350,
+        height: 210,
+        resizeMode: 'stretch',
     },
     imageContainer: {
         position:'absolute',
@@ -81,6 +81,24 @@ const styles = StyleSheet.create({
         top: 10,
         marginBottom: 0
      
+      },
+
+      frontImageContainer:{
+        marginBottom:20,
+        borderRadius: 20,
+        marginTop:50,
+        borderWidth: 4,
+        borderColor: '#C9C4AA',
+        overflow: 'hidden',
+        borderRadius: 14,
+        elevation: 8,
+        shadowOpacity: 0.3,
+        shadowColor:'black',
+        shadowRadius:12,
+        width: 350,
+        height:210,
+        justifyContent: 'center',
+        alignItems:'center'
       },
       logo: {
         width: 50,
@@ -125,5 +143,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default RegisterScreen;
 

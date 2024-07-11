@@ -9,6 +9,10 @@ import DesignScreen from './screens/DesignScreen';
 import DesignersHomeScreen from './screens/DesignersHomeScreen';
 import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
+{/*import ProfileScreen from './screens/ProfileScreen';
+import PendingOrdersScreen from './screens/PendingOrdersScreen';
+import NewOrders from './screens/NewOrdersScreen';
+import Settings from './screens/SettingsScreen';*/}
 
 const Stack = createStackNavigator();
 

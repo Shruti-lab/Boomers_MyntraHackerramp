@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     marginStart: 70,
     paddingTop:5,
-    paddingEnd:125,
+    paddingEnd:12,
+    width:'60%',
    
   },
   header:{

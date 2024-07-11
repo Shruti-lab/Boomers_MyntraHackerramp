@@ -9,6 +9,7 @@ import DesignScreen from './screens/DesignScreen';
 import DesignersHomeScreen from './screens/DesignersHomeScreen';
 import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
+import ProfilePage from './screens/ProfileScreen';
 {/*import ProfileScreen from './screens/ProfileScreen';
 import PendingOrdersScreen from './screens/PendingOrdersScreen';
 import NewOrders from './screens/NewOrdersScreen';
@@ -26,6 +27,7 @@ function App() {
         <Stack.Screen name="DesignersHome" component={DesignersHomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="TailorResponse" component={TailorResponseScreen} />
+        <Stack.Screen name="Profile" component={ProfilePage}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

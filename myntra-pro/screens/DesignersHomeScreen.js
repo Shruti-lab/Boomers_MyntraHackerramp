@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginHorizontal: 10,
     borderRadius: 10,
+    shadowColor:'black',
     elevation: 5,
     padding: 2,
     

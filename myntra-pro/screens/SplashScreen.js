@@ -9,7 +9,7 @@ function SplashScreen({ navigation }) {
     setTimeout(() => {
       setLoading(false);
       navigation.navigate('Login'); // Navigate to the Login screen after the delay
-    }, 3000); // 3 seconds delay
+    }, 1500); // 3 seconds delay
   }, []);
 
   return (

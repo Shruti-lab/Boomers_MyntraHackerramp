@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
 
 const ProfilePage = () => {
   // Dummy data (replace with actual data from your database or state)
@@ -37,7 +37,7 @@ const ProfilePage = () => {
       </View>
       </View>
 
-      <View style={styles.container1}>
+      
       <View style={styles.InfoContainer}>
       <View style={styles.detailsContainer}>
         <Text style={styles.label}>Qualifications:</Text>
@@ -46,20 +46,27 @@ const ProfilePage = () => {
 
       <View style={styles.detailsContainer}>
         <Text style={styles.label}>Experience:</Text>
-        <Text style={styles.value}>{profileData.experience} years</Text>
+        <Text style={styles.value}>{profileData.experience}</Text>
       </View>
 
       <View style={styles.detailsContainer}>
         <Text style={styles.label}>Expertise:</Text>
         <Text style={styles.value}>{profileData.expertise}</Text>
       </View>
-      </View>
     </View>
+    <TouchableOpacity style={styles.editProfile}>
+        <Button color='#ff4468' title="Edit Profile" />
+    </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+    editProfile:{
+        elevation:10,
+        shadowColor:'#0000ee',
+        width:'80%'
+    },
     profession:{
         marginTop:30,
         fontSize:24
@@ -103,9 +110,10 @@ const styles = StyleSheet.create({
         height:3
     },
   container: {
-    
+    justifyContent:'flex-start',
     alignItems: 'center',
     backgroundColor: '#fff',
+    height:'100%'
 
   },
   profileImage: {
@@ -134,31 +142,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cardView:{
-    elevation: 20,
-    margin: 10,
-    shadowColor:'#000080',
-    position:'relative',
+    marginTop:0,
+    elevation: 10,
+    shadowColor:'#000',
     height:'55%',
     borderRadius:0,
-    top:50,
+    top:30,
     backgroundColor:'#FFFAF0',
     width:'80%',
     justifyContent:'center',
     alignItems:'center',
   },
   InfoContainer:{
-    marginTop:60,
-    borderWidth:1,
-    padding:10,
-    flex:0,
-    
-    width:'90%'
-    
+    width:'80%',
+    marginTop:50,
+    elevation:10,
+    shadowColor:'black',
+    padding:10,    
+    marginBottom:20
   },
-  container1:{
-    flexDirection:'column',
-    marginVertical:10
-  },
+  
   designerText:{
     fontSize:25,
     fontStyle:'normal',

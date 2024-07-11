@@ -12,7 +12,6 @@ const ProfilePage = () => {
 
   return (
     <View style={styles.container}>
-      
         <Text style={styles.designerText}>Profile</Text>
         <View style={styles.myntraInsider}>
         <View style={styles.logoImage}>

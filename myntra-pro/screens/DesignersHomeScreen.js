@@ -4,14 +4,16 @@ import { View, Text, StyleSheet, TouchableOpacity ,Image} from 'react-native';
 function DesignerHomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <View style ={styles.header}>
-      <View style={styles.logoImage}>
+      <View style={styles.myntraInsider}>
+        <View style={styles.logoImage}>
         <Image 
         source={require('../assets/logo.png')}
         style ={styles.logo} />
-      </View>
-      <Text style ={styles.designerText} >Welcome,</Text>
-      </View>
+        </View>
+            <Text source={require('../assets/myntraInsider.png')} style={styles.myntraText}>Welcome,</Text>
+            <Image source={require('../assets/insiderCrown.png')} style={styles.myntraImage}/>
+        </View>
+      
       <View style={styles.frontImageContainer}>
         <Image 
         source={require('../assets/designerFrontImage.png')}
@@ -71,10 +73,37 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   logo: {
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 30,
     resizeMode: 'contain',
   },
+  myntraImage:{
+    paddingTop:10,
+    width:50,
+    height:40,
+    resizeMode:'contain',
+    
+},
+myntraText:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginStart: 4,
+    color: '',
+    top:0
+
+},
+myntraInsider:{
+    marginTop:20,
+    flexDirection:'row',
+    borderWidth:3,
+    borderColor:'#7f7053',
+    borderRadius:4,
+    margin:10,
+    height:50,
+    alignItems:'center',
+    width:'90%'
+
+},
   box: {
     width: 150,
     height: 150,

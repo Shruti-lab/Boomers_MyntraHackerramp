@@ -40,32 +40,48 @@ const ProfilePage = () => {
           </View>
         </View>
 
+        <Text style ={styles.details} >Details</Text>
         <View style={styles.infoContainer}>
           <View style={styles.detailsContainer}>
-            <Text style={styles.label}>Qualifications:</Text>
+            <Text style={styles.label}>Qualifications</Text>
             <Text style={styles.value}>{profileData.qualifications}</Text>
           </View>
 
           <View style={styles.detailsContainer}>
-            <Text style={styles.label}>Experience:</Text>
+            <Text style={styles.label}>Experience</Text>
             <Text style={styles.value}>{profileData.experience}</Text>
           </View>
 
           <View style={styles.detailsContainer}>
-            <Text style={styles.label}>Expertise:</Text>
+            <Text style={styles.label}>Expertise</Text>
             <Text style={styles.value}>{profileData.expertise}</Text>
           </View>
         </View>
-
+    </ScrollView>
         <TouchableOpacity style={styles.editProfile}>
           <Button color='#ff4468' title="Edit Profile" />
         </TouchableOpacity>
-      </ScrollView>
+      
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+    details:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingTop: 2,
+        alignItems: 'center',
+        color: '#636363',
+        marginTop:30,
+        borderWidth : 1,
+        borderRadius:5,
+        borderColor:'#D3D3D3',
+        paddingStart:13,
+        paddingEnd:10,
+        marginBottom:20
+
+    },
     myntraImage:{
         paddingTop:10,
         width:50,
@@ -85,7 +101,7 @@ const styles = StyleSheet.create({
         marginTop:20,
         flexDirection:'row',
         borderWidth:3,
-        borderColor:'gray',
+        borderColor:'#7f7053',
         borderRadius:4,
         margin:10,
         height:50,
@@ -98,9 +114,13 @@ const styles = StyleSheet.create({
   },
   editProfile: {
     elevation: 10,
-    shadowColor: '#0000ee',
+    justifyContent:'center',
     width: '80%',
     marginTop: 20,
+    marginBottom:20,
+    marginStart:40,
+    alignContent:'center'
+    
   },
   profession: {
     marginTop: 30,
@@ -146,6 +166,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    
   },
   profileImage: {
     width: 170,
@@ -160,18 +181,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   detailsContainer: {
-    marginTop: 5,
-    flexDirection: 'row',
-    marginBottom: 10,
+   
+   paddingStart:15,
+    borderWidth:1,
+    borderColor:'#D3d3d3',
+    width:'100%',
+    padding:10,
+    height:70
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     width: 120,
+    marginBottom:5
   },
   value: {
     fontSize: 16,
     flex: 1,
+    color:'gray'
   },
   cardView: {
     marginTop: 0,
@@ -186,8 +213,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     width: '100%',
-    marginTop:15,
-    padding: 20,
+    padding: 0,
    
   },
   designerText: {

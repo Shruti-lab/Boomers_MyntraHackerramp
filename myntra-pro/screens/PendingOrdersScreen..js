@@ -1,59 +1,66 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Image } from 'react-native';
-import * as ImagePicker from 'react-native-image-picker';
+// screens/NewOrdersScreen.js
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
-function PendingOrdersScreen() {
-  const [image, setImage] = useState(null);
-  const [description, setDescription] = useState('');
-
-  const pickImage = () => {
-    ImagePicker.launchImageLibrary({}, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setImage(response.assets[0].uri);
-      }
-    });
-  };
-
-  const submitDesign = () => {
-    // Handle the form submission logic here
-    console.log('Design submitted', { image, description });
-  };
+const PendingOrdersScreen = () => {
+  // Mock data for orders
+  const orders = [
+    { id: 1, customerName: 'John Doe', orderDetails: ' 1 trouser' },
+    { id: 2, customerName: 'Jane Smith', orderDetails: '1 dress' },
+    { id: 3, customerName: 'Bob Johnson', orderDetails: '1 shirt' },
+    // Add more orders as needed
+  ];
 
   return (
     <View style={styles.container}>
-      <Text>Submit Your Design</Text>
-      <Button title="Pick an image" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        style={styles.input}
-      />
-      <Button title="Submit" onPress={submitDesign} />
+      <Text style={styles.heading}>Orders Pending</Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {orders.map(order => (
+          <View key={order.id} style={styles.orderCard}>
+            <Text style={styles.customerName}>{order.customerName}</Text>
+            <Text style={styles.orderDetails}>{order.orderDetails}</Text>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#fff4f2',
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginTop:20
+  },
+  scrollContainer: {
     alignItems: 'center',
   },
-  image: {
-    width: 200,
-    height: 200,
-    marginTop: 10,
+  orderCard: {
+    width: '100%',
+    padding: 15,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
-  input: {
-    width: 200,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 5,
-    marginTop: 10,
+  customerName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  orderDetails: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 5,
   },
 });
 

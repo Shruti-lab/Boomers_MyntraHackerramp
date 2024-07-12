@@ -12,7 +12,7 @@ const ProfilePage = () => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.designerText}>Profile</Text>
+        
         <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.myntraInsider}>
         <View style={styles.logoImage}>
@@ -58,15 +58,21 @@ const ProfilePage = () => {
           </View>
         </View>
     </ScrollView>
-        <TouchableOpacity style={styles.editProfile}>
-          <Button color='#ff4468' title="Edit Profile" />
+        <View style={styles.editContainer}>
+        <TouchableOpacity style={styles.editProfile} alignItems='center'>
+          <Button color='#ff4468' title="Edit Profile" alignItems='center'/>
         </TouchableOpacity>
+        </View>
       
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  editContainer:{
+      width:'100%',
+      alignItems:'center'
+  },
     details:{
         fontSize: 20,
         fontWeight: 'bold',
@@ -97,11 +103,11 @@ const styles = StyleSheet.create({
 
     },
     myntraInsider:{
-        marginTop:20,
+        marginTop:50,
         flexDirection:'row',
         borderWidth:3,
         borderColor:'#7f7053',
-        borderRadius:4,
+        borderRadius:3,
         margin:10,
         height:40,
         alignItems:'center',
@@ -115,10 +121,10 @@ const styles = StyleSheet.create({
   editProfile: {
     elevation: 10,
     justifyContent:'center',
-    width: '80%',
+    width: 120,
     marginTop: 20,
     marginBottom:20,
-    marginStart:40,
+    
     alignContent:'center'
     
   },

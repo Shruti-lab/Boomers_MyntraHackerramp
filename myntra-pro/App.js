@@ -13,6 +13,8 @@ import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
 import ProfilePage from './screens/ProfileScreen';
 import ProfileFormScreen from './screens/ProfileFormScreen';
+import NewOrdersScreen from './screens/NewOrdersScreen';
+import PendingOrdersScreen from './screens/PendingOrdersScreen.';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,9 +60,9 @@ function BottomTabNavigator() {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
-          } else if (route.name === 'Design') {
-            iconName = focused ? 'color-palette' : 'color-palette-outline';
-          } else if (route.name === 'TailorResponse') {
+          } else if (route.name === 'New Orders') {
+            iconName = focused ? 'add-circle' : 'add-circle-outline';
+          } else if (route.name === 'Orders Pending') {
             iconName = focused ? 'shirt' : 'shirt-outline';
           }
 
@@ -79,10 +81,11 @@ function BottomTabNavigator() {
         headerShown:false,
         
         tabBarStyle: {
-          height: 60, // Adjust the height of the tab bar
+          height: 70, // Adjust the height of the tab bar
           backgroundColor: '#ffffff', // Optional: Background color of the tab bar
           borderTopWidth: 1, // Optional: Add a border on top of the tab bar
           borderTopColor: '#dddddd',
+        
           paddingBottom:10 // Optional: Border color
         },
       })}
@@ -95,9 +98,9 @@ function BottomTabNavigator() {
       style={styles.BottomTabNavigator}
     >
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
+      <Tab.Screen name="New Orders" component={NewOrdersScreen} />
+      <Tab.Screen name="Orders Pending" component={PendingOrdersScreen} />
       <Tab.Screen name="Profile" component={ProfilePage} />
-      <Tab.Screen name="Design" component={DesignScreen} />
-      <Tab.Screen name="TailorResponse" component={TailorResponseScreen} />
       {/* Add other Tab screens here */}
     </Tab.Navigator>
   );
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     
   },
   Ionicons:{
-    marginTop:12
+    marginTop:12,
   }
 });
 

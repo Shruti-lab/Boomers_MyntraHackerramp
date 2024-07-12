@@ -12,6 +12,7 @@ import DesignersHomeScreen from './screens/DesignersHomeScreen';
 import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
 import ProfilePage from './screens/ProfileScreen';
+import ProfileFormScreen from './screens/ProfileFormScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,20 +76,22 @@ function BottomTabNavigator() {
         tabBarLabelStyle: {
           fontSize: 9, // Adjust the font size of the tab labels
         },
-        headerShown:false
-      })}
-      tabBarOptions={{
-        activeTintColor:   '#ff4468',
-        inactiveTintColor: 'black',
+        headerShown:false,
+        
         tabBarStyle: {
           height: 60, // Adjust the height of the tab bar
           backgroundColor: '#ffffff', // Optional: Background color of the tab bar
           borderTopWidth: 1, // Optional: Add a border on top of the tab bar
-          borderTopColor: '#dddddd', // Optional: Border color
+          borderTopColor: '#dddddd',
+          paddingBottom:10 // Optional: Border color
         },
-
-      
+      })}
+      tabBarOptions ={{
+         activeTintColor:   '#ff4468',
+        inactiveTintColor: 'black',
       }}
+     
+     
       style={styles.BottomTabNavigator}
     >
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
@@ -108,6 +111,8 @@ function App() {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="DesignerPage" component={BottomTabNavigator} />
+        <Stack.Screen name="ProfileForm" component={ProfileFormScreen} />
+
         {/* If you want to include other screens in the stack */}
         {/* <Stack.Screen name="Profile" component={ProfilePage}/> */}
       </Stack.Navigator>
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
     
   },
   Ionicons:{
-    marginTop:10
+    marginTop:12
   }
 });
 

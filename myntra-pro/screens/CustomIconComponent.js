@@ -10,7 +10,7 @@ const CustomIconComponent = ({ name, color, size, focused }) => {
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <Image
         source={iconImageSource}
-        style={{ marginTop:10,width: 40, height: size,resizeMode:'contain' }}
+        style={{ marginTop:12,width: 40, height: size,resizeMode:'contain' }}
       />
     </View>
   );

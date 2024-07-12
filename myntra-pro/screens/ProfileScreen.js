@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginStart: 8,
+    
     paddingTop: 5,
     paddingEnd: 1,
     alignItems: 'center',

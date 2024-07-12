@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,56 +7,37 @@ import { Ionicons } from '@expo/vector-icons';
 import CustomIconComponent from './screens/CustomIconComponent';
 import SplashScreen from './screens/SplashScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import DesignScreen from './screens/DesignScreen';
 import DesignersHomeScreen from './screens/DesignersHomeScreen';
 import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
-import ProfilePage from './screens/ProfileScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import ProfileFormScreen from './screens/ProfileFormScreen';
 import NewOrdersScreen from './screens/NewOrdersScreen';
 import PendingOrdersScreen from './screens/PendingOrdersScreen.';
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function CustomTabBarIcon({ name, focused, color, size }) {
-  if(name === 'home') {
-    return (
-      <View style={styles.iconContainer}>
-        {focused && <View style={styles.focusedLine} />}
-         <CustomIconComponent name={name} color={color} size={size} focused={focused} />
-      </View>
-    );
-  }
-
-  else if(name ==='home-outline') {
-    return (
-      <View style={styles.iconContainer}>
-        {focused && <View style={styles.focusedLine} />}
-         <CustomIconComponent name={name} color={color} size={size} focused={focused} />
-      </View>
-    );
-  }
-  else {
-    return (
-      <View style={styles.iconContainer}>
-        {focused && <View style={styles.focusedLine} />}
-        <Ionicons name={name} size={size} color={color} style={styles.Ionicons} />
-      </View>
-    );
-  }
+  return (
+    <View style={styles.iconContainer}>
+      {focused && <View style={styles.focusedLine} />}
+      {name === 'home' || name === 'home-outline' ? (
+        <CustomIconComponent name={name} color={color} size={size} focused={focused} />
+      ) : (
+        <Ionicons name={name} size={size} color={color} style={styles.icon} />
+      )}
+    </View>
+  );
 }
 
 function BottomTabNavigator() {
   return (
-    <Tab.Navigator 
-     
+    <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
           if (route.name === 'Home') {
-            
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
@@ -76,32 +57,27 @@ function BottomTabNavigator() {
           );
         },
         tabBarLabelStyle: {
-          fontSize: 9, // Adjust the font size of the tab labels
+          fontSize: 9,
         },
-        headerShown:false,
-        
+        headerShown: false,
         tabBarStyle: {
-          height: 70, // Adjust the height of the tab bar
-          backgroundColor: '#ffffff', // Optional: Background color of the tab bar
-          borderTopWidth: 1, // Optional: Add a border on top of the tab bar
+          height: 70,
+          backgroundColor: '#ffffff',
+          borderTopWidth: 1,
           borderTopColor: '#dddddd',
-        
-          paddingBottom:10 // Optional: Border color
+          paddingBottom: 10,
         },
       })}
-      tabBarOptions ={{
-         activeTintColor:   '#ff4468',
+      tabBarOptions={{
+        activeTintColor: '#ff4468',
         inactiveTintColor: 'black',
       }}
-     
-     
       style={styles.BottomTabNavigator}
     >
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
       <Tab.Screen name="New Orders" component={NewOrdersScreen} />
       <Tab.Screen name="Orders Pending" component={PendingOrdersScreen} />
-      <Tab.Screen name="Profile" component={ProfilePage} />
-      {/* Add other Tab screens here */}
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -115,36 +91,29 @@ function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="DesignerPage" component={BottomTabNavigator} />
         <Stack.Screen name="ProfileForm" component={ProfileFormScreen} />
-
-        {/* If you want to include other screens in the stack */}
-        {/* <Stack.Screen name="Profile" component={ProfilePage}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
- 
   iconContainer: {
     alignItems: 'center',
-    
-    marginTop:0
-    
-    
+    justifyContent: 'center',
+    position: 'relative',
+    width: 50,
+    height: 50,
   },
   focusedLine: {
-    flex:1,
     position: 'absolute',
     top: 0,
-    width: '100%',
+    width: 100,
     height: 2,
     backgroundColor: '#ff4468',
-    marginBottom:10
-    
   },
-  Ionicons:{
-    marginTop:12,
-  }
+  icon: {
+    marginTop: 10,
+  },
 });
 
 export default App;

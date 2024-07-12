@@ -1,29 +1,79 @@
-// screens/ProfileFormScreen.js
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import SQLite from 'react-native-sqlite-storage';
+
+SQLite.DEBUG(true);
+SQLite.enablePromise(true);
 
 const ProfileFormScreen = ({ navigation }) => {
+  const [db, setDb] = useState(null);
+  const [name, setName] = useState('');
+  const [dob, setDob] = useState('');
+  const [qualification, setQualification] = useState('');
+  const [experience, setExperience] = useState('');
+  const [expertise, setExpertise] = useState('');
+
+  useEffect(() => {
+    const initializeDb = async () => {
+      try {  
+        const dbConnection = await SQLite.openDatabase({
+          name: 'profile.db',
+          location: 'E:\React_Project\Boomers_MyntraHackerramp\myntra-pro\DataBase\profile.sqbpro',
+        });
+        console.log('Database opened');
+        
+        try {
+          setDb(dbConnection);
+          console.log('setup')
+        }
+        catch{
+          console.log('setup error')
+        }
+        createTable(dbConnection);
+      } catch (error) {
+        console.error('Error  database', error);
+      }
+    };
+
+    initializeDb();
+  }, []);
+
+  const createTable = (db) => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `CREATE TABLE IF NOT EXISTS profiles (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, dob TEXT, qualification TEXT, experience TEXT, expertise TEXT)`,
+        [],
+        () => { console.log('Table created successfully'); },
+        error => { console.log('Error creating table ' + error.message); }
+      );
+    });
+  };
+
+  const saveProfile = () => {
+    if (name && dob && qualification && experience && expertise && db) {
+      db.transaction(txn => {
+        txn.executeSql(
+          `INSERT INTO profiles (name, dob, qualification, experience, expertise) VALUES (?, ?, ?, ?, ?)`,
+          [name, dob, qualification, experience, expertise],
+          (_, resultSet) => {
+            console.log('Insert success: ', resultSet);
+            Alert.alert('Success', 'Profile saved successfully');
+            navigation.navigate('DesignerPage');
+          },
+          (_, error) => {
+            console.log('Error saving profile: ', error);
+            Alert.alert('Error', 'Failed to save profile');
+          }
+        );
+      });
+    } else {
+      Alert.alert('Error', 'Please fill all fields');
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.myntraInsider}>
-        <View style={styles.logoImage}>
-          <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
-        </View>
-        <View style={styles.myntraTextContainer}>
-          <Text style={styles.myntraText}>Profile Details</Text>
-        </View>
-      </View>
-      
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Enter Name" style={styles.textInput} />
-        <TextInput placeholder="Enter DOB" style={styles.textInput} />
-        <TextInput placeholder="Enter Qualification in designing (if any)" style={styles.textInput} />
-        <TextInput placeholder="Enter designing experience (in years)" style={styles.textInput} />
-        <TextInput placeholder="Enter Field of Expertise" style={styles.textInput} />
-        <TouchableOpacity style={styles.submitButton} >
-          <Button title="Submit" color="#ff4468" onPress={() => navigation.navigate('DesignerPage')}/>
-        </TouchableOpacity>
-      </View>
+      {/* Your UI components */}
     </View>
   );
 };

@@ -36,7 +36,7 @@ function RegisterScreen({ navigation }) {
       <View style={styles.buttonContainer}>
         <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('ProfileForm')} />
       </View>
-      <Text style={styles.textSmall}>Don't have an account?</Text>
+      <Text style={styles.textSmall}>Already have an account?</Text>
       <View style={styles.registerButton}>
       <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('Login')} />
       </View>

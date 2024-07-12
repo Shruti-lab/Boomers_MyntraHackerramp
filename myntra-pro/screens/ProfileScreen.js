@@ -78,9 +78,8 @@ const styles = StyleSheet.create({
         borderRadius:5,
         borderColor:'#D3D3D3',
         paddingStart:13,
-        paddingEnd:10,
+        paddingEnd:13,
         marginBottom:20
-
     },
     myntraImage:{
         paddingTop:10,

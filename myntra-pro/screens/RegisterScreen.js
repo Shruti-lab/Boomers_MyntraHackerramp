@@ -34,7 +34,7 @@ function RegisterScreen({ navigation }) {
       <TextInput placeholder="Create Password" secureTextEntry style={styles.input} />
       <TextInput placeholder="Confirm Password" secureTextEntry style={styles.input} />
       <View style={styles.buttonContainer}>
-        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('Login')} />
+        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('ProfileForm')} />
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>

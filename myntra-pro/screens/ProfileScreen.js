@@ -13,6 +13,7 @@ const ProfilePage = () => {
   return (
     <View style={styles.container}>
         <Text style={styles.designerText}>Profile</Text>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.myntraInsider}>
         <View style={styles.logoImage}>
         <Image 
@@ -23,7 +24,7 @@ const ProfilePage = () => {
             <Image source={require('../assets/insiderCrown.png')} style={styles.myntraImage}/>
         </View>
       
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      
         <View style={styles.cardView}>
           <View style={styles.profileImageContainer}>
             <Image source={profileData.profilePicture} style={styles.profileImage} />
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
         paddingTop: 2,
         alignItems: 'center',
         color: '#636363',
-        marginTop:30,
+        marginTop:0,
         borderWidth : 1,
         borderRadius:5,
         borderColor:'#D3D3D3',
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     },
     myntraImage:{
         paddingTop:10,
-        width:50,
+        width:40,
         height:40,
         resizeMode:'contain',
         
@@ -103,8 +104,9 @@ const styles = StyleSheet.create({
         borderColor:'#7f7053',
         borderRadius:4,
         margin:10,
-        height:50,
-        alignItems:'center'
+        height:40,
+        alignItems:'center',
+        width:'95%',
 
     },
   scrollContainer: {
@@ -200,10 +202,10 @@ const styles = StyleSheet.create({
     color:'gray'
   },
   cardView: {
-    marginTop: 0,
+  
     elevation: 5,
     shadowColor: '#000',
-    top: 30,
+    top: 0,
     backgroundColor: '#FFFAF0',
     width: '100%',
     justifyContent: 'center',

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   myntraImage:{
     paddingTop:10,
-    width:50,
+    width:40,
     height:40,
     resizeMode:'contain',
     
@@ -99,9 +99,9 @@ myntraInsider:{
     borderColor:'#7f7053',
     borderRadius:4,
     margin:10,
-    height:50,
+    height:40,
     alignItems:'center',
-    width:'90%'
+    width:'95%'
 
 },
   box: {

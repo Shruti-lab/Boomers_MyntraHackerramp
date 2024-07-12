@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity ,Image} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity ,Image, ScrollView} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function DesignerHomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+    <View style={styles.Maincontainer}>
+       <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.myntraInsider}>
         <View style={styles.logoImage}>
         <Image 
@@ -39,10 +42,15 @@ function DesignerHomeScreen({ navigation }) {
           <Text style={styles.boxText}>Settings</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  scrollContainer:{
+    width:'100%',
+  },
 
   icon:{
 
@@ -62,10 +70,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent:'flex-end',
-    paddingBottom:100,
-    alignItems: 'center',
+    justifyContent:'flex-start',
+    paddingBottom:10,
+   
     backgroundColor: 'white',
+    paddingStart:20,
+    paddingEnd:20
   },
   row: {
     flexDirection: 'row',
@@ -93,7 +103,7 @@ myntraText:{
 
 },
 myntraInsider:{
-    marginTop:20,
+   
     flexDirection:'row',
     borderWidth:3,
     borderColor:'#7f7053',
@@ -101,7 +111,8 @@ myntraInsider:{
     margin:10,
     height:40,
     alignItems:'center',
-    width:'95%'
+    width:'95%',
+    marginTop:30
 
 },
   box: {
@@ -149,7 +160,9 @@ myntraInsider:{
     width: 350,
     height:240,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems:'center',
+    margin:10
+  
   },
   designerText:{
     fontSize:25,

@@ -33,7 +33,7 @@ function LoginScreen({ navigation }) {
       <TextInput placeholder="Email" style={styles.input} />
       <TextInput placeholder="Password" secureTextEntry style={styles.input} />
       <View style={styles.buttonContainer}>
-        <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('DesignersHome')} />
+        <Button color="#ff4468" title="Login" onPress={() => navigation.navigate('DesignerPage')} />
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
       },
   container: {
+    marginTop:20,
     flex: 1,
     alignItems: 'center',
     padding: 20,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import { app } from '../firebaseConfig'; // Adjust the path according to your project structure
 
 const ProfileFormScreen = ({ navigation }) => {
@@ -11,12 +11,14 @@ const ProfileFormScreen = ({ navigation }) => {
   const [experience, setExperience] = useState('');
   const [expertise, setExpertise] = useState('');
   const [user, setUser] = useState(null);
+  const [profileExists, setProfileExists] = useState(false); // State to track if profile exists
 
   useEffect(() => {
     const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
+        await checkProfileExists(user.uid); // Check if profile exists for the user
       } else {
         Alert.alert('User not authenticated');
         navigation.navigate('Login'); // Redirect to login if user is not authenticated
@@ -26,15 +28,39 @@ const ProfileFormScreen = ({ navigation }) => {
     return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
+  // Function to check if profile exists for the current user
+  const checkProfileExists = async (userId) => {
+    const db = getFirestore(app);
+    const profileRef = doc(db, 'profiles', userId);
+
+    try {
+      const profileSnapshot = await getDoc(profileRef);
+      if (profileSnapshot.exists()) {
+        const profileData = profileSnapshot.data();
+        setName(profileData.name || '');
+        setDob(profileData.dob || '');
+        setQualification(profileData.qualification || '');
+        setExperience(profileData.experience || '');
+        setExpertise(profileData.expertise || '');
+        setProfileExists(true);
+      } else {
+        setProfileExists(false);
+      }
+    } catch (error) {
+      console.error('Error checking profile existence:', error);
+      Alert.alert('Error', 'Failed to check profile existence');
+    }
+  };
+
+  // Function to handle form submission
   const handleSubmit = async () => {
     if (!user) {
       Alert.alert('User not authenticated');
       return;
     }
 
-    const db = getFirestore(app); // Initialize Firestore instance
-
-    const userDocRef = doc(db, 'users', user.uid); // Use UID instead of email for better practice
+    const db = getFirestore(app);
+    const userDocRef = doc(db, 'profiles', user.uid);
 
     try {
       await setDoc(userDocRef, {
@@ -44,6 +70,7 @@ const ProfileFormScreen = ({ navigation }) => {
         experience,
         expertise,
       });
+
       console.log('Profile details saved successfully');
       navigation.navigate('DesignerPage'); // Navigate to the desired screen after saving profile details
     } catch (error) {

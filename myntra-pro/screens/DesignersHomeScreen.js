@@ -6,7 +6,7 @@ function DesignerHomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
     <View style={styles.Maincontainer}>
-       <ScrollView contentContainerStyle={styles.scrollContainer}>
+       
       <View style={styles.myntraInsider}>
         <View style={styles.logoImage}>
         <Image 
@@ -16,26 +16,28 @@ function DesignerHomeScreen({ navigation }) {
             <Text source={require('../assets/myntraInsider.png')} style={styles.myntraText}>Welcome,</Text>
             <Image source={require('../assets/insiderCrown.png')} style={styles.myntraImage}/>
         </View>
-      
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.frontImageContainer2}>
       <View style={styles.frontImageContainer}>
         <Image 
         source={require('../assets/designerFrontImage.png')}
         style ={styles.imageView} />
       </View>
+      </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('Profile')}>
-          <Image source={require('../assets/profileIcon.png')} style={styles.icon} />
-          <Text style={styles.boxText}>Profile</Text>
+          <Image source={require('../assets/notificationIcon.png')} style={styles.icon} />
+          <Text style={styles.boxText}>Notifications</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('PendingOrders')}>
-          <Image source={require('../assets/pendingOrdersIcon.png')} style={styles.icon} />
-          <Text style={styles.boxText}>Pending Orders</Text>
+          <Image source={require('../assets/communityIcon.png')} style={styles.icon} />
+          <Text style={styles.boxText}>Community Page</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('NewOrders')}>
-          <Image source={require('../assets/newOrderIcon.png')} style={styles.icon} />
-          <Text style={styles.boxText}>New Orders</Text>
+          <Image source={require('../assets/wardrobe.png')} style={styles.icon} />
+          <Text style={styles.boxText}>Wardrobe</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('Settings')}>
           <Image source={require('../assets/settingsIcon.png')} style={styles.icon} />
@@ -48,12 +50,14 @@ function DesignerHomeScreen({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
+  frontImageContainer2:{
+    justifyContent:'center',
+    alignItems:'center'
+  },
   scrollContainer:{
     width:'100%',
-  },
-
-  icon:{
-
+    backgroundColor:'#fff4f2',
+    height:'100%',
   },
 
   logoImage:{
@@ -74,13 +78,14 @@ const styles = StyleSheet.create({
     paddingBottom:10,
    
     backgroundColor: 'white',
-    paddingStart:20,
-    paddingEnd:20
+    
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems:'center',
+    marginVertical: 30,
+    marginHorizontal:30
   },
   logo: {
     width: 35,
@@ -105,7 +110,7 @@ myntraText:{
 myntraInsider:{
    
     flexDirection:'row',
-    borderWidth:3,
+    borderWidth:2,
     borderColor:'#7f7053',
     borderRadius:4,
     margin:10,
@@ -116,12 +121,12 @@ myntraInsider:{
 
 },
   box: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginHorizontal: 10,
+    marginHorizontal: 40,
     borderRadius: 10,
     shadowColor:'black',
     elevation: 5,
@@ -129,16 +134,16 @@ myntraInsider:{
     
   },
   boxText: {
-    color: 'gray',
-    fontSize: 18,
+    color: '#ff4866',
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   icon: {
-    width: 50,
+    width: 40,
     height: 50,
     resizeMode: 'contain',
-    marginBottom: 10, 
+    marginBottom: 0, 
     borderRadius:20,
     elevation: 5
     // Adjust this to control the spacing between icon and text
@@ -161,7 +166,8 @@ myntraInsider:{
     height:240,
     justifyContent: 'center',
     alignItems:'center',
-    margin:10
+    margin:10,
+    
   
   },
   designerText:{

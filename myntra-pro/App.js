@@ -10,7 +10,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import DesignersHomeScreen from './screens/DesignersHomeScreen';
 import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import ProfilePage from './screens/ProfileScreen';
 import ProfileFormScreen from './screens/ProfileFormScreen';
 import NewOrdersScreen from './screens/NewOrdersScreen';
 import PendingOrdersScreen from './screens/PendingOrdersScreen.';
@@ -77,7 +77,7 @@ function BottomTabNavigator() {
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
       <Tab.Screen name="New Orders" component={NewOrdersScreen} />
       <Tab.Screen name="Orders Pending" component={PendingOrdersScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfilePage} />
     </Tab.Navigator>
   );
 }

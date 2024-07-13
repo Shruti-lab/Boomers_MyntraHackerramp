@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import app from '../firebaseConfig'; // Adjust the path according to your project structure
 
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
+    setLoading(true);
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Login successful
+      .then(async (userCredential) => {
         const user = userCredential.user;
-        Alert.alert('Log in Successful');
-        console.log('User logged in successfully:');
-        navigation.navigate('ProfileForm'); // Navigate to the desired screen after login
+        const db = getFirestore(app);
+        const profileDocRef = doc(db, 'profiles', user.email);
+        const profileSnapshot = await getDoc(profileDocRef);
+
+        if (profileSnapshot.exists()) {
+          const profileData = profileSnapshot.data();
+          if (
+            !profileData.name ||
+            !profileData.dob ||
+            !profileData.qualification ||
+            !profileData.experience ||
+            !profileData.expertise
+          ) {
+            navigation.navigate('ProfileForm', { user });
+          } else {
+            navigation.navigate('DesignerPage', { user });
+          }
+        } else {
+          navigation.navigate('ProfileForm', { user });
+        }
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         Alert.alert('Login Failed', errorMessage);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -54,7 +73,11 @@ function LoginScreen({ navigation }) {
         onChangeText={(text) => setPassword(text)}
       />
       <View style={styles.buttonContainer}>
-        <Button color="#ff4468" title="Login" onPress={handleLogin} />
+        {loading ? (
+          <ActivityIndicator size="large" color="#ff4468" />
+        ) : (
+          <Button color="#ff4468" title="Login" onPress={handleLogin} />
+        )}
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>

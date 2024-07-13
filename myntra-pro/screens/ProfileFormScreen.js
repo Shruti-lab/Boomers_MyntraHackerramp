@@ -1,79 +1,103 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
-import SQLite from 'react-native-sqlite-storage';
-
-SQLite.DEBUG(true);
-SQLite.enablePromise(true);
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../firebaseConfig'; // Adjust the path according to your project structure
 
 const ProfileFormScreen = ({ navigation }) => {
-  const [db, setDb] = useState(null);
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
   const [qualification, setQualification] = useState('');
   const [experience, setExperience] = useState('');
   const [expertise, setExpertise] = useState('');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const initializeDb = async () => {
-      try {  
-        const dbConnection = await SQLite.openDatabase({
-          name: 'profile.db',
-          location: 'E:\React_Project\Boomers_MyntraHackerramp\myntra-pro\DataBase\profile.sqbpro',
-        });
-        console.log('Database opened');
-        
-        try {
-          setDb(dbConnection);
-          console.log('setup')
-        }
-        catch{
-          console.log('setup error')
-        }
-        createTable(dbConnection);
-      } catch (error) {
-        console.error('Error  database', error);
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        Alert.alert('User not authenticated');
+        navigation.navigate('Login'); // Redirect to login if user is not authenticated
       }
-    };
+    });
 
-    initializeDb();
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
-  const createTable = (db) => {
-    db.transaction(txn => {
-      txn.executeSql(
-        `CREATE TABLE IF NOT EXISTS profiles (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, dob TEXT, qualification TEXT, experience TEXT, expertise TEXT)`,
-        [],
-        () => { console.log('Table created successfully'); },
-        error => { console.log('Error creating table ' + error.message); }
-      );
-    });
-  };
+  const handleSubmit = async () => {
+    if (!user) {
+      Alert.alert('User not authenticated');
+      return;
+    }
 
-  const saveProfile = () => {
-    if (name && dob && qualification && experience && expertise && db) {
-      db.transaction(txn => {
-        txn.executeSql(
-          `INSERT INTO profiles (name, dob, qualification, experience, expertise) VALUES (?, ?, ?, ?, ?)`,
-          [name, dob, qualification, experience, expertise],
-          (_, resultSet) => {
-            console.log('Insert success: ', resultSet);
-            Alert.alert('Success', 'Profile saved successfully');
-            navigation.navigate('DesignerPage');
-          },
-          (_, error) => {
-            console.log('Error saving profile: ', error);
-            Alert.alert('Error', 'Failed to save profile');
-          }
-        );
+    const db = getFirestore(app); // Initialize Firestore instance
+
+    const userDocRef = doc(db, 'users', user.uid); // Use UID instead of email for better practice
+
+    try {
+      await setDoc(userDocRef, {
+        name,
+        dob,
+        qualification,
+        experience,
+        expertise,
       });
-    } else {
-      Alert.alert('Error', 'Please fill all fields');
+      console.log('Profile details saved successfully');
+      navigation.navigate('DesignerPage'); // Navigate to the desired screen after saving profile details
+    } catch (error) {
+      console.error('Error saving profile details: ', error);
+      Alert.alert('Error', 'Failed to save profile details');
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Your UI components */}
+      <View style={styles.myntraInsider}>
+        <View style={styles.logoImage}>
+          <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
+        </View>
+        <View style={styles.myntraTextContainer}>
+          <Text style={styles.myntraText}>Enter Profile Details</Text>
+        </View>
+      </View>
+      
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Enter Name"
+          style={styles.textInput}
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+        <TextInput
+          placeholder="Enter DOB"
+          style={styles.textInput}
+          value={dob}
+          onChangeText={(text) => setDob(text)}
+        />
+        <TextInput
+          placeholder="Enter Qualification in designing (if any)"
+          style={styles.textInput}
+          value={qualification}
+          onChangeText={(text) => setQualification(text)}
+        />
+        <TextInput
+          placeholder="Enter designing experience (in years)"
+          style={styles.textInput}
+          value={experience}
+          onChangeText={(text) => setExperience(text)}
+        />
+        <TextInput
+          placeholder="Enter Field of Expertise"
+          style={styles.textInput}
+          value={expertise}
+          onChangeText={(text) => setExpertise(text)}
+        />
+        <TouchableOpacity style={styles.submitButton}>
+          <Button title="Submit" color="#ff4468" onPress={handleSubmit} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

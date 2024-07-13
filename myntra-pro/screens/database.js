@@ -3,7 +3,7 @@ import SQLite from 'react-native-sqlite-storage';
 // Open the database
 const db = SQLite.openDatabase(
   {
-    name: 'UserDB.db',
+    name: 'profile.db',
     location: 'default',
   },
   () => {

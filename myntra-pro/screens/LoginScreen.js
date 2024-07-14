@@ -52,11 +52,9 @@ function LoginScreen({ navigation }) {
         <Image source={require('../assets/frontPage.png')} style={styles.frontImage} />
       </View>
       <View style={styles.customer}>
-        <TouchableOpacity style={styles.buttonCustomer} onPress={() => console.log('Customer pressed')}>
-          <Button color="#ff4468" title="Customer" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonDesigner} onPress={() => console.log('Designer pressed')}>
-          <Button color="#ff4468" title="Designer" />
+  
+        <TouchableOpacity style={styles.buttonDesigner}>
+          <Button color="#ff4468" title="Designer Login" />
         </TouchableOpacity>
       </View>
       <TextInput

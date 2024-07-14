@@ -14,8 +14,14 @@ import ProfilePage from './screens/ProfileScreen';
 import ProfileFormScreen from './screens/ProfileFormScreen';
 import NewOrdersScreen from './screens/NewOrdersScreen';
 import PendingOrdersScreen from './screens/PendingOrdersScreen.';
+import DesignerOrdersScreen from './screens/DesignerOrdersScreen';
+import CustomerHomeScreen from './screens/CustomerHomeScreen';
+import OrderScreen from './screens/OrderScreen';
+import InputPage from './screens/InputPage';
+import CustomerLoginScreen from './screens/CustomerLoginScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 function CustomTabBarIcon({ name, focused, color, size }) {
   return (
@@ -75,7 +81,7 @@ function BottomTabNavigator() {
       style={styles.BottomTabNavigator}
     >
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
-      <Tab.Screen name="New Orders" component={NewOrdersScreen} />
+      <Tab.Screen name="New Orders" component={DesignerOrdersScreen} />
       <Tab.Screen name="Orders Pending" component={PendingOrdersScreen} />
       <Tab.Screen name="Profile" component={ProfilePage} />
     </Tab.Navigator>
@@ -91,6 +97,12 @@ function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="DesignerPage" component={BottomTabNavigator} />
         <Stack.Screen name="ProfileForm" component={ProfileFormScreen} />
+        <Stack.Screen name="CustomerHome" component={CustomerHomeScreen} />
+        <Stack.Screen name="OrderScreen" component={OrderScreen} />
+        <Stack.Screen name="InputPage" component={InputPage} />
+        <Stack.Screen name="CustomerLogin" component={CustomerLoginScreen} />
+        
+
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -8,7 +8,7 @@ function SplashScreen({ navigation }) {
     // Simulate a network request or some async task
     setTimeout(() => {
       setLoading(false);
-      navigation.navigate('Login'); // Navigate to the Login screen after the delay
+      navigation.navigate('InputPage'); // Navigate to the Login screen after the delay
     }, 1500); // 3 seconds delay
   }, []);
 

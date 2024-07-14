@@ -9,38 +9,18 @@ function CustomerLoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
-    const auth = getAuth(app);
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const user = userCredential.user;
-        const db = getFirestore(app);
-        const profileDocRef = doc(db, 'Customerprofiles', user.email);
-        const profileSnapshot = await getDoc(profileDocRef);
-
-        if (profileSnapshot.exists()) {
-          const profileData = profileSnapshot.data();
-          if (
-            !profileData.name ||
-            !profileData.dob ||
-            !profileData.qualification ||
-            !profileData.experience ||
-            !profileData.expertise
-          ) {
-            navigation.navigate('CustomerHome', { user });
-          } else {
-            navigation.navigate('DesignerPage', { user });
-          }
-        } else {
-          navigation.navigate('ProfileForm', { user });
-        }
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        Alert.alert('Login Failed', errorMessage);
-      })
-      .finally(() => setLoading(false));
+    try {
+      const auth = getAuth(app);
+      await signInWithEmailAndPassword(auth, email, password);
+      setLoading(false);
+      navigation.navigate('CustomerHome');
+    } catch (error) {
+      setLoading(false);
+      console.error('Login Error: ', error);
+      Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
+    }
   };
 
   return (
@@ -52,10 +32,9 @@ function CustomerLoginScreen({ navigation }) {
         <Image source={require('../assets/frontPage.png')} style={styles.frontImage} />
       </View>
       <View style={styles.customer}>
-        <TouchableOpacity style={styles.buttonCustomer} >
-          <Button color="#ff4468" title="Customer" onPress={() => navigation.navigate('CustomerHome')}/>
+        <TouchableOpacity style={styles.buttonDesigner} onPress={() => console.log('Designer pressed')}>
+          <Button color="#ff4468" title="Customer Login" />
         </TouchableOpacity>
-  
       </View>
       <TextInput
         placeholder="Email"
@@ -77,24 +56,18 @@ function CustomerLoginScreen({ navigation }) {
           <Button color="#ff4468" title="Login" onPress={handleLogin} />
         )}
       </View>
-      
-      
+      <Text style={styles.textSmall}>Don't have an account?</Text>
+      <View style={styles.registerButton}>
+        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('CustomerRegister')} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  customer: {
-    flexDirection: 'row',
-    marginBottom: 20,
-    width: '170',
-    marginTop: 10
-  },
-  buttonCustomer: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginRight: 10,
+  registerButton: {
+    marginTop: 10,
+    width: '80%',
   },
   buttonDesigner: {
     paddingVertical: 10,
@@ -141,20 +114,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
-  text: {
-    fontSize: 30,
-    color: 'blue',
-    textShadowColor: 'blue',
-    textShadowRadius: 15,
-    elevation: 10,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  textSmall: {
-    marginTop: 20,
-    fontSize: 16,
-    textAlign: 'center',
-  },
   input: {
     width: '80%',
     height: 40,
@@ -165,10 +124,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginVertical: 10,
-    width: '80%',
-  },
-  registerButton: {
-    marginTop: 10,
     width: '80%',
   },
 });

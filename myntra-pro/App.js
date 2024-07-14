@@ -19,6 +19,7 @@ import CustomerHomeScreen from './screens/CustomerHomeScreen';
 import OrderScreen from './screens/OrderScreen';
 import InputPage from './screens/InputPage';
 import CustomerLoginScreen from './screens/CustomerLoginScreen';
+import CustomerRegisterScreen from './screens/CustomerRegisterScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -101,7 +102,8 @@ function App() {
         <Stack.Screen name="OrderScreen" component={OrderScreen} />
         <Stack.Screen name="InputPage" component={InputPage} />
         <Stack.Screen name="CustomerLogin" component={CustomerLoginScreen} />
-        
+        <Stack.Screen name="CustomerRegister" component={CustomerRegisterScreen} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

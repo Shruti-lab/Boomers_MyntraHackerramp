@@ -14,6 +14,7 @@ const firebaseConfig = {
     measurementId: "G-8ECBT1YJ15"
   };
 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -22,5 +23,20 @@ const auth = getAuth(app);
 
 // Initialize Firestore and get a reference to the service
 const firestore = getFirestore(app);
+
+const getUserEmail = () => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const userEmail = user.email;
+      // Use userEmail as customer ID when placing orders
+      console.log('User email:', userEmail);
+      // Call a function to place an order using userEmail as customer ID
+      placeOrder(userEmail);
+    } else {
+      console.log('User not logged in');
+      // Handle case where user is not logged in
+    }
+  });
+};
 
 export { auth, firestore };

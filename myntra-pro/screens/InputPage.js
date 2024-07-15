@@ -65,13 +65,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imageView: {
-    width: 345,
-    height: 240,
+    width: 320,
+    height: 210,
     resizeMode: 'stretch',
     borderColor: 'black'
   },
   frontImageContainer: {
-    marginBottom: 20,
+    marginBottom: 40,
     borderRadius: 20,
     marginTop: 20,
     borderWidth: 4,
@@ -83,15 +83,16 @@ const styles = StyleSheet.create({
     elevation: 10,
     shadowColor: '#000000',
     shadowRadius: 12,
-    width: 350,
-    height: 240,
+    width: 320,
+    height: 210,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
+
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
   },
   container: {
     flex: 1,

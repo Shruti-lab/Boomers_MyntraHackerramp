@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView, Button, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Image, SafeAreaView } from 'react-native';
 import { getFirestore, collection, query, onSnapshot, doc, updateDoc, where } from 'firebase/firestore';
 import app from '../firebaseConfig';
 
@@ -48,56 +48,86 @@ function DesignerOrdersScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>
-        {orders.length > 0 ? orders[0].productName : 'No Orders'} {/* Display first order's product name */}
-      </Text>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {orders.length === 0 ? (
-          <Text style={styles.noOrdersText}>No new orders</Text>
-        ) : (
-          orders.map((order) => (
-            <View key={order.id} style={styles.orderCard}>
-              <Text style={styles.customerName}>Customer ID: {order.customerId}</Text>
-              <Text style={styles.orderDetails}>
-                Measurements: 
-                {"\n"}
-                Chest: {order.measurements.chest}{"\n"}
-                Waist: {order.measurements.waist}{"\n"}
-                Hip: {order.measurements.hip}{"\n"}
-                Sleeve Length: {order.measurements.sleeveLength}{"\n"}
-                Neck: {order.measurements.neck}{"\n"}
-                Inseam: {order.measurements.inseam}
-              </Text>
-              <TextInput
-                placeholder="Enter your quote"
-                style={styles.input}
-                value={quoteMap[order.id] || ''}
-                onChangeText={(value) => handleChangeQuote(order.id, value)}
-              />
-              <Button title="Send Quote" onPress={() => handleSendQuote(order.id)} style={styles.sendQuote}/>
-            </View>
-          ))
-        )}
-      </ScrollView>
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Image 
+          source={require('../assets/myntraIcon.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.headerTitle}>New Orders</Text>
+      </View>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={orders.length === 0 ? styles.noOrdersContainer : styles.scrollContainer}>
+          {orders.length === 0 ? (
+            <Text style={styles.noOrdersText}>No new orders</Text>
+          ) : (
+            orders.map((order) => (
+              <View key={order.id} style={styles.orderCard}>
+                <Text style={styles.customerName}>Product Name: {order.productName}</Text>
+                <Text style={styles.orderDetails}>
+                  Measurements: 
+                  {"\n"}
+                  Chest: {order.measurements.chest}{"\n"}
+                  Waist: {order.measurements.waist}{"\n"}
+                  Hip: {order.measurements.hip}{"\n"}
+                  Sleeve Length: {order.measurements.sleeveLength}{"\n"}
+                  Neck: {order.measurements.neck}{"\n"}
+                  Inseam: {order.measurements.inseam}
+                </Text>
+                <TextInput
+                  placeholder="Enter your quote"
+                  style={styles.input}
+                  value={quoteMap[order.id] || ''}
+                  onChangeText={(value) => handleChangeQuote(order.id, value)}
+                />
+                <Button title="Send Quote" onPress={() => handleSendQuote(order.id)} color="#ff4468" />
+              </View>
+            ))
+          )}
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff4f2',
+    marginTop: 30
+  },
+  header: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: '#7f7053',
+    borderRadius: 4,
+    margin: 10,
+    height: 40,
+    alignItems: 'center',
+    width: '95%',
+  },
+  logo: {
+    width: 35,
+    height: 30,
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+  },
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff4f2',
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    marginTop: 20,
   },
   scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  noOrdersContainer: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -122,22 +152,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     marginTop: 5,
+    marginBottom: 10,
   },
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    marginTop: 10,
   },
   noOrdersText: {
     fontSize: 18,
     color: '#D3D3D3',
     textAlign: 'center',
   },
-  sendQuote:{
-    color:'#ff4468'
-  }
 });
 
 export default DesignerOrdersScreen;

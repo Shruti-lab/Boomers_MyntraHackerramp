@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Alert, ScrollView, Image } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Alert, ScrollView, Image, SafeAreaView } from 'react-native';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import app from '../firebaseConfig';
 import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
 
 function OrderScreen({ navigation }) {
   const [productName, setProductName] = useState('');
@@ -25,7 +26,7 @@ function OrderScreen({ navigation }) {
       }
 
       // Add order to Firestore
-      await addDoc(collection(db, 'orders'), {
+      const docRef = await addDoc(collection(db, 'orders'), {
         customerId: 'customer_id', // Replace with actual customer ID
         productName,
         measurements: {
@@ -36,28 +37,27 @@ function OrderScreen({ navigation }) {
           neck,
           inseam,
         },
-        imageUri, // Include image URI in the order
+        imageUri: imageUri || null, // Include image URI in the order if available
+        status: 'pending', // Include status field
+        quotes: {}, // Initialize quotes field as an empty hashmap
       });
 
       // Show confirmation message
       setOrderPlaced(true);
+
+      // Reset form fields and hide confirmation message
+      setProductName('');
+      setChest('');
+      setWaist('');
+      setHip('');
+      setSleeveLength('');
+      setNeck('');
+      setInseam('');
+      setImageUri(null);
     } catch (error) {
       console.error('Error placing order: ', error);
       Alert.alert('Error', 'There was an error placing your order.');
     }
-  };
-
-  const handleNewOrder = () => {
-    // Reset form fields and hide confirmation message
-    setProductName('');
-    setChest('');
-    setWaist('');
-    setHip('');
-    setSleeveLength('');
-    setNeck('');
-    setInseam('');
-    setImageUri(null); // Reset image URI
-    setOrderPlaced(false);
   };
 
   const handleImagePick = async () => {
@@ -76,92 +76,119 @@ function OrderScreen({ navigation }) {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (!result.cancelled) {
       setImageUri(result.uri);
     }
   };
 
+  const handleNewOrder = () => {
+    // Reset form fields and state to allow creating a new order
+    setProductName('');
+    setChest('');
+    setWaist('');
+    setHip('');
+    setSleeveLength('');
+    setNeck('');
+    setInseam('');
+    setImageUri(null);
+    setOrderPlaced(false);
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.myntraInsider}>
-        <View style={styles.logoImage}>
-          <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
-        </View>
-        <View style={styles.myntraTextContainer}>
-          <Text style={styles.myntraText}>Enter Order Details</Text>
-        </View>
-      </View>
-
-      {!orderPlaced && (
-        <>
-          <View style={styles.uploadImage}>
-          <Button title="Upload Image" onPress={handleImagePick} color="#ff4468"  />
+    <SafeAreaView style={{ flex: 1, paddingTop: Constants.statusBarHeight }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.myntraInsider}>
+            <View style={styles.logoImage}>
+              <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
+            </View>
+            <View style={styles.myntraTextContainer}>
+              <Text style={styles.myntraText}>Enter Order Details</Text>
+            </View>
           </View>
-          {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
-          
-          <TextInput
-            placeholder="Product Name"
-            style={styles.input}
-            value={productName}
-            onChangeText={setProductName}
-          />
-          <TextInput
-            placeholder="Chest Measurement (inches)"
-            style={styles.input}
-            value={chest}
-            onChangeText={setChest}
-            keyboardType="numeric"
-          />
-          <TextInput
-            placeholder="Waist Measurement (inches)"
-            style={styles.input}
-            value={waist}
-            onChangeText={setWaist}
-            keyboardType="numeric"
-          />
-          <TextInput
-            placeholder="Hip Measurement (inches)"
-            style={styles.input}
-            value={hip}
-            onChangeText={setHip}
-            keyboardType="numeric"
-          />
-          <TextInput
-            placeholder="Sleeve Length (inches)"
-            style={styles.input}
-            value={sleeveLength}
-            onChangeText={setSleeveLength}
-            keyboardType="numeric"
-          />
-          <TextInput
-            placeholder="Neck Measurement (inches)"
-            style={styles.input}
-            value={neck}
-            onChangeText={setNeck}
-            keyboardType="numeric"
-          />
-          <TextInput
-            placeholder="Inseam Measurement (inches)"
-            style={styles.input}
-            value={inseam}
-            onChangeText={setInseam}
-            keyboardType="numeric"
-          />
-          <Button title="Get Quotes" onPress={handlePlaceOrder} color="#ff4468" />
-        </>
-      )}
 
-      {orderPlaced && (
-        <View style={styles.confirmationContainer}>
-          <Text style={styles.confirmationText}>Order Sent!</Text>
-          <Button title="Place New Order" onPress={handleNewOrder} color="#ff4468" />
+          {!orderPlaced && (
+            <>
+              {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
+              
+              <View style={styles.uploadImage}>
+                <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" />
+              </View>
+
+              <TextInput
+                placeholder="Product Name"
+                style={styles.input}
+                value={productName}
+                onChangeText={setProductName}
+              />
+              <TextInput
+                placeholder="Chest Measurement (inches)"
+                style={styles.input}
+                value={chest}
+                onChangeText={setChest}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Waist Measurement (inches)"
+                style={styles.input}
+                value={waist}
+                onChangeText={setWaist}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Hip Measurement (inches)"
+                style={styles.input}
+                value={hip}
+                onChangeText={setHip}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Sleeve Length (inches)"
+                style={styles.input}
+                value={sleeveLength}
+                onChangeText={setSleeveLength}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Neck Measurement (inches)"
+                style={styles.input}
+                value={neck}
+                onChangeText={setNeck}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Inseam Measurement (inches)"
+                style={styles.input}
+                value={inseam}
+                onChangeText={setInseam}
+                keyboardType="numeric"
+              />
+              <Button title="Place Order" onPress={handlePlaceOrder} color="#ff4468" />
+            </>
+          )}
+
+          {orderPlaced && (
+            <View style={styles.confirmationContainer}>
+              <Text style={styles.confirmationText}>Order Placed Successfully!</Text>
+              <Button title="New Order" onPress={handleNewOrder} color="#ff4468" />
+            </View>
+          )}
         </View>
-      )}
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  myntraText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginStart: 4,
+    top: 0,
+  },
+  uploadImage: {
+    marginBottom: 30,
+  },
   myntraTextContainer: {
     alignItems: 'center',
     width: '80%',
@@ -170,18 +197,6 @@ const styles = StyleSheet.create({
     width: 35,
     height: 30,
     resizeMode: 'contain',
-  },
-  myntraImage: {
-    paddingTop: 10,
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-  },
-  myntraText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginStart: 4,
-    top: 0,
   },
   myntraInsider: {
     marginTop: 30,
@@ -200,21 +215,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-  },
-  buttonContainer: {
-    marginTop: 20,
   },
   confirmationContainer: {
     flex: 1,
@@ -231,7 +237,7 @@ const styles = StyleSheet.create({
     height: 200,
     marginVertical: 10,
     borderRadius: 10,
-    resizeMode: 'contain', // Ensures the image aspect ratio is maintained
+    resizeMode: 'cover', // Ensures the image aspect ratio is maintained
     alignSelf: 'center', // Center the image
   },
 });

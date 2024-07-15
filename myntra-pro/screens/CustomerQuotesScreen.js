@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import app from '../firebaseConfig'; // Adjust path as per your structure
 import OrderDetailsScreen from './OrderDetailsScreen'; // Import OrderDetailsScreen
 
 function CustomerQuotesScreen({ navigation }) {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const customer_id = 'customer_id'; // Replace with actual customer ID or get it dynamically
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const db = getFirestore(app);
-        const ordersSnapshot = await getDocs(collection(db, 'orders'));
+        const ordersRef = collection(db, 'orders');
+        const q = query(ordersRef, where('customerId', '==', customer_id));
+        const ordersSnapshot = await getDocs(q);
         const ordersList = ordersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         setOrders(ordersList);
       } catch (error) {
@@ -32,9 +35,7 @@ function CustomerQuotesScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-      {/* Conditional rendering based on selectedOrder state */}
+    <SafeAreaView style={styles.container}>
       {selectedOrder ? (
         <View style={styles.orderDetailsContainer}>
           <OrderDetailsScreen order={selectedOrder} onBackToOrders={handleBackToOrders} />
@@ -54,7 +55,6 @@ function CustomerQuotesScreen({ navigation }) {
           )}
         />
       )}
-    </View>
     </SafeAreaView>
   );
 }

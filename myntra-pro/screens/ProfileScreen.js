@@ -86,7 +86,10 @@ const ProfilePage = ({ navigation }) => {
             <Text style={styles.label}>Expertise</Text>
             <Text style={styles.value}>{profileData.expertise}</Text>
           </View>
+          
         </View>
+
+        
       </ScrollView>
 
       <View style={styles.editContainer}>
@@ -128,6 +131,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginStart: 4,
     top: 0,
+    color:'#ff4468'
   },
   myntraInsider: {
     marginTop: 50,

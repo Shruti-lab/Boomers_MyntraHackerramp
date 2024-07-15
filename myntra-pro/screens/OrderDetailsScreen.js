@@ -37,6 +37,7 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop:20,
     padding: 20,
     backgroundColor: '#fff4f2',
   },

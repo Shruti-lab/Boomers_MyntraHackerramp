@@ -71,8 +71,12 @@ function OrderScreen({ navigation }) {
       return;
     }
   
-    const result = 
-    await ImagePicker.launchImageLibraryAsync(); 
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true, // This allows the user to crop the image
+      aspect: [4, 3],
+      quality: 1,
+    });
   
     if (!result.cancelled) {
       if (result.uri) {
@@ -110,8 +114,8 @@ function OrderScreen({ navigation }) {
           {!orderPlaced && (
             <>
               {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
-              <View style={styles.uploadImage}>
-                <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" />
+              <View style={styles.uploadImage} marginStart='50'>
+                <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" marginStart='50' />
               </View>
 
               <TextInput
@@ -181,6 +185,7 @@ function OrderScreen({ navigation }) {
 const styles = StyleSheet.create({
   uploadImage: {
     marginBottom: 30,
+    
   },
   myntraTextContainer: {
     alignItems: 'center',

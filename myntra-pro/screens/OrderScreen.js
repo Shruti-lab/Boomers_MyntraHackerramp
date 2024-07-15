@@ -3,7 +3,6 @@ import { View, Text, Button, TextInput, StyleSheet, Alert, ScrollView, Image, Sa
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import app from '../firebaseConfig';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
 
 function OrderScreen({ navigation }) {
   const [productName, setProductName] = useState('');
@@ -26,7 +25,7 @@ function OrderScreen({ navigation }) {
       }
 
       // Add order to Firestore
-      const docRef = await addDoc(collection(db, 'orders'), {
+      await addDoc(collection(db, 'orders'), {
         customerId: 'customer_id', // Replace with actual customer ID
         productName,
         measurements: {
@@ -37,52 +36,21 @@ function OrderScreen({ navigation }) {
           neck,
           inseam,
         },
-        imageUri: imageUri || null, // Include image URI in the order if available
+        imageUri, // Include image URI in the order
         status: 'pending', // Include status field
         quotes: {}, // Initialize quotes field as an empty hashmap
       });
 
       // Show confirmation message
       setOrderPlaced(true);
-
-      // Reset form fields and hide confirmation message
-      setProductName('');
-      setChest('');
-      setWaist('');
-      setHip('');
-      setSleeveLength('');
-      setNeck('');
-      setInseam('');
-      setImageUri(null);
     } catch (error) {
       console.error('Error placing order: ', error);
       Alert.alert('Error', 'There was an error placing your order.');
     }
   };
 
-  const handleImagePick = async () => {
-    // Ask for permission to access the photo library
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (permissionResult.granted === false) {
-      Alert.alert("Permission to access camera roll is required!");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setImageUri(result.uri);
-    }
-  };
-
   const handleNewOrder = () => {
-    // Reset form fields and state to allow creating a new order
+    // Reset form fields and hide confirmation message
     setProductName('');
     setChest('');
     setWaist('');
@@ -90,12 +58,44 @@ function OrderScreen({ navigation }) {
     setSleeveLength('');
     setNeck('');
     setInseam('');
-    setImageUri(null);
+    setImageUri(null); // Reset image URI
     setOrderPlaced(false);
   };
 
+  const handleImagePick = async () => {
+    // Ask for permission to access the photo library
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+    if (permissionResult.granted === false) {
+      Alert.alert("Permission to access camera roll is required!");
+      return;
+    }
+  
+    const result = 
+    await ImagePicker.launchImageLibraryAsync(); 
+  
+    if (!result.cancelled) {
+      if (result.uri) {
+        // Handle the cropped image upload here
+        try {
+          // Call the function to upload the image to your server
+          const uploadResult = await uploadImage(result.uri);
+          // Process the uploadResult as needed
+          // For example, display a success message or further action
+          Alert.alert("Image uploaded successfully");
+        } catch (error) {
+          // Handle upload error
+          Alert.alert("Error uploading image: " + error.message);
+        }
+      }
+    } else {
+      Alert.alert("Image selection cancelled");
+    }
+  };
+  
+  
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: Constants.statusBarHeight }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <View style={styles.myntraInsider}>
@@ -110,7 +110,6 @@ function OrderScreen({ navigation }) {
           {!orderPlaced && (
             <>
               {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
-              
               <View style={styles.uploadImage}>
                 <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" />
               </View>
@@ -163,14 +162,14 @@ function OrderScreen({ navigation }) {
                 onChangeText={setInseam}
                 keyboardType="numeric"
               />
-              <Button title="Place Order" onPress={handlePlaceOrder} color="#ff4468" />
+              <Button title="Get Quotes" onPress={handlePlaceOrder} color="#ff4468" />
             </>
           )}
 
           {orderPlaced && (
             <View style={styles.confirmationContainer}>
-              <Text style={styles.confirmationText}>Order Placed Successfully!</Text>
-              <Button title="New Order" onPress={handleNewOrder} color="#ff4468" />
+              <Text style={styles.confirmationText}>Order Sent!</Text>
+              <Button title="Place New Order" onPress={handleNewOrder} color="#ff4468" />
             </View>
           )}
         </View>
@@ -180,12 +179,6 @@ function OrderScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  myntraText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginStart: 4,
-    top: 0,
-  },
   uploadImage: {
     marginBottom: 30,
   },
@@ -197,6 +190,18 @@ const styles = StyleSheet.create({
     width: 35,
     height: 30,
     resizeMode: 'contain',
+  },
+  myntraImage: {
+    paddingTop: 10,
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
+  },
+  myntraText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginStart: 4,
+    top: 0,
   },
   myntraInsider: {
     marginTop: 30,
@@ -215,12 +220,22 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
   },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 15,
+  },
   input: {
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
+  },
+  buttonContainer: {
+    marginTop: 20,
   },
   confirmationContainer: {
     flex: 1,

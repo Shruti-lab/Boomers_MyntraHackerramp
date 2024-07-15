@@ -21,6 +21,7 @@ import CustomerLoginScreen from './screens/CustomerLoginScreen';
 import CustomerRegisterScreen from './screens/CustomerRegisterScreen';
 import CustomerQuotesScreen from './screens/CustomerQuotesScreen';
 import { UserProvider } from './components/UserContext';
+import EmptyScreen from './screens/EmptyScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -70,6 +71,7 @@ function CustomerBottomTabNavigator() {
       style={styles.BottomTabNavigator}
     >
       <Tab.Screen name="Home" component={CustomerHomeScreen} />
+      <Tab.Screen name="New" component={EmptyScreen} />
       <Tab.Screen name="Orders" component={OrderScreen} />
       <Tab.Screen name="Quotes" component={CustomerQuotesScreen} />
     </Tab.Navigator>

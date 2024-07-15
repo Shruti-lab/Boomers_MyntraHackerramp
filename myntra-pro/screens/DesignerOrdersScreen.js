@@ -65,7 +65,7 @@ function DesignerOrdersScreen() {
             orders.map((order) => (
               <View key={order.id} style={styles.orderCard}>
                 <Image
-                  source={{ uri: order.productImage || '../assets/dressImage.png' }} // Placeholder image
+                  source={require('../assets/dressImage.png')} // Placeholder image
                   style={styles.productImage}
                 />
                 <View style={styles.orderContent}>
@@ -295,6 +295,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     marginRight: 15,
+    resizeMode:'contain'
   },
   orderContent: {
     flex: 1,

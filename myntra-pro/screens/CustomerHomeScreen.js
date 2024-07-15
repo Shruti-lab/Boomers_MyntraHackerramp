@@ -6,8 +6,8 @@ function CustomerHomeScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Tailor App</Text>
       <Button
-        title="Order a Tailored Product"
-        onPress={() => navigation.navigate('OrderScreen')}
+        title="Customer Home"
+        
       />
     </View>
   );

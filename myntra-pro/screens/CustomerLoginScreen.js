@@ -15,7 +15,7 @@ function CustomerLoginScreen({ navigation }) {
       const auth = getAuth(app);
       await signInWithEmailAndPassword(auth, email, password);
       setLoading(false);
-      navigation.navigate('CustomerHome');
+      navigation.navigate('CustomerPage');
     } catch (error) {
       setLoading(false);
       console.error('Login Error: ', error);

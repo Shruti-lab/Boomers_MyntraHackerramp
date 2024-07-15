@@ -1,30 +1,41 @@
-// screens/NewOrdersScreen.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import app from '../firebaseConfig'; // Adjust the path according to your project structure
 
-const PendingOrdersScreen = () => {
-  // Mock data for orders
-  const orders = [
-    { id: 1, customerName: 'John Doe', orderDetails: ' 1 trouser' },
-    { id: 2, customerName: 'Jane Smith', orderDetails: '1 dress' },
-    { id: 3, customerName: 'Bob Johnson', orderDetails: '1 shirt' },
-    // Add more orders as needed
-  ];
+function PendingOrdersScreen() {
+  const [pendingOrders, setPendingOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchPendingOrders = async () => {
+      const db = getFirestore(app);
+      const ordersSnapshot = await getDocs(collection(db, 'designers', 'designerId', 'pendingOrders')); // Replace 'designerId' with the actual designer's ID
+      const ordersList = ordersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      setPendingOrders(ordersList);
+    };
+
+    fetchPendingOrders();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Orders Pending</Text>
+      <Text style={styles.heading}>Pending Orders</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {orders.map(order => (
+        {pendingOrders.map((order) => (
           <View key={order.id} style={styles.orderCard}>
-            <Text style={styles.customerName}>{order.customerName}</Text>
-            <Text style={styles.orderDetails}>{order.orderDetails}</Text>
+            <Text style={styles.customerName}>Customer: {order.customerName}</Text>
+            <Text style={styles.orderDetails}>
+              Order Details: {order.details}
+            </Text>
+            <Text style={styles.orderDate}>
+              Order Date: {new Date(order.createdAt.seconds * 1000).toLocaleDateString()}
+            </Text>
           </View>
         ))}
       </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -36,7 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    marginTop:20
+    marginTop: 20,
   },
   scrollContainer: {
     alignItems: 'center',
@@ -61,6 +72,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     marginTop: 5,
+  },
+  orderDate: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 10,
   },
 });
 

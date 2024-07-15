@@ -26,10 +26,14 @@ function DesignerOrdersScreen() {
       const currentQuote = quoteMap[orderId] || ''; // Get current quote from state map
       await updateDoc(orderDoc, {
         designerQuotes: {
-          designer_id: currentQuote, // Replace with actual designer ID
+          quote: currentQuote, // Save the actual quote amount
         },
+        status: 'quote_sent', // Update status to 'quote_sent'
       });
       Alert.alert('Quote Sent', 'Your quote has been sent successfully.');
+
+      // Remove the order from the local state
+      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
     } catch (error) {
       console.error('Error sending quote: ', error);
       Alert.alert('Error', 'There was an error sending your quote.');
@@ -45,27 +49,36 @@ function DesignerOrdersScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Pending Orders</Text>
+      <Text style={styles.heading}>
+        {orders.length > 0 ? orders[0].productName : 'No Orders'} {/* Display first order's product name */}
+      </Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {orders.map((order) => (
-          <View key={order.id} style={styles.orderCard}>
-            <Text style={styles.customerName}>Customer ID: {order.customerId}</Text>
-            <Text style={styles.orderDetails}>
-              Measurements: 
-              {"\n"}
-              Shoulder: {order.measurements.shoulder}{"\n"}
-              Waist: {order.measurements.waist}{"\n"}
-              Neck: {order.measurements.neck}
-            </Text>
-            <TextInput
-              placeholder="Enter your quote"
-              style={styles.input}
-              value={quoteMap[order.id] || ''}
-              onChangeText={(value) => handleChangeQuote(order.id, value)}
-            />
-            <Button title="Send Quote" onPress={() => handleSendQuote(order.id)} />
-          </View>
-        ))}
+        {orders.length === 0 ? (
+          <Text style={styles.noOrdersText}>No new orders</Text>
+        ) : (
+          orders.map((order) => (
+            <View key={order.id} style={styles.orderCard}>
+              <Text style={styles.customerName}>Customer ID: {order.customerId}</Text>
+              <Text style={styles.orderDetails}>
+                Measurements: 
+                {"\n"}
+                Chest: {order.measurements.chest}{"\n"}
+                Waist: {order.measurements.waist}{"\n"}
+                Hip: {order.measurements.hip}{"\n"}
+                Sleeve Length: {order.measurements.sleeveLength}{"\n"}
+                Neck: {order.measurements.neck}{"\n"}
+                Inseam: {order.measurements.inseam}
+              </Text>
+              <TextInput
+                placeholder="Enter your quote"
+                style={styles.input}
+                value={quoteMap[order.id] || ''}
+                onChangeText={(value) => handleChangeQuote(order.id, value)}
+              />
+              <Button title="Send Quote" onPress={() => handleSendQuote(order.id)} />
+            </View>
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -84,6 +97,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   orderCard: {
@@ -113,6 +128,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     marginTop: 10,
+  },
+  noOrdersText: {
+    fontSize: 18,
+    color: '#D3D3D3',
+    textAlign: 'center',
   },
 });
 

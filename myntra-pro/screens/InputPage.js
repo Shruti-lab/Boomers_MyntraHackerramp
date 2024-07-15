@@ -6,7 +6,7 @@ const InputPage = ({ navigation }) => {
     if (role === 'designer') {
       navigation.navigate('Login');
     } else if (role === 'customer') {
-      navigation.navigate('CustomerRegister');
+      navigation.navigate('CustomerLogin');
     }
   };
 

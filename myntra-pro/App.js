@@ -12,7 +12,6 @@ import TailorResponseScreen from './screens/TailorResponseScreen';
 import LoginScreen from './screens/LoginScreen';
 import ProfilePage from './screens/ProfileScreen';
 import ProfileFormScreen from './screens/ProfileFormScreen';
-import NewOrdersScreen from './screens/NewOrdersScreen';
 import PendingOrdersScreen from './screens/PendingOrdersScreen.';
 import DesignerOrdersScreen from './screens/DesignerOrdersScreen';
 import CustomerHomeScreen from './screens/CustomerHomeScreen';
@@ -20,8 +19,64 @@ import OrderScreen from './screens/OrderScreen';
 import InputPage from './screens/InputPage';
 import CustomerLoginScreen from './screens/CustomerLoginScreen';
 import CustomerRegisterScreen from './screens/CustomerRegisterScreen';
+import CustomerQuotesScreen from './screens/CustomerQuotesScreen';
+import { UserProvider } from './components/UserContext';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+function CustomerBottomTabNavigator() {
+  return (
+    <UserProvider>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Orders') {
+            iconName = focused ? 'list' : 'list-outline';
+          } else if (route.name === 'Quotes') {
+            iconName = focused ? 'pricetag' : 'pricetag-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          return (
+            <CustomTabBarIcon
+              name={iconName}
+              focused={focused}
+              color={color}
+              size={size}
+            />
+          );
+        },
+        tabBarLabelStyle: {
+          fontSize: 9,
+        },
+        headerShown: false,
+        tabBarStyle: {
+          height: 70,
+          backgroundColor: '#ffffff',
+          borderTopWidth: 1,
+          borderTopColor: '#dddddd',
+          paddingBottom: 10,
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#ff4468',
+        inactiveTintColor: 'black',
+      }}
+      style={styles.BottomTabNavigator}
+    >
+      <Tab.Screen name="Home" component={CustomerHomeScreen} />
+      <Tab.Screen name="Orders" component={OrderScreen} />
+      <Tab.Screen name="Quotes" component={CustomerQuotesScreen} />
+    </Tab.Navigator>
+    </UserProvider>
+  );
+}
+
 
 
 function CustomTabBarIcon({ name, focused, color, size }) {
@@ -103,6 +158,8 @@ function App() {
         <Stack.Screen name="InputPage" component={InputPage} />
         <Stack.Screen name="CustomerLogin" component={CustomerLoginScreen} />
         <Stack.Screen name="CustomerRegister" component={CustomerRegisterScreen} />
+        <Stack.Screen name="CustomerPage" component={CustomerBottomTabNavigator} />
+        
 
 
       </Stack.Navigator>

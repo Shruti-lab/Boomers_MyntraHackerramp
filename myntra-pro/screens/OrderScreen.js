@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Alert, ScrollView, Image } from 'react-native';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import app from '../firebaseConfig';
+import * as ImagePicker from 'expo-image-picker';
 
 function OrderScreen({ navigation }) {
   const [productName, setProductName] = useState('');
@@ -12,6 +13,7 @@ function OrderScreen({ navigation }) {
   const [neck, setNeck] = useState('');
   const [inseam, setInseam] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [imageUri, setImageUri] = useState(null); // State for image URI
   const db = getFirestore(app);
 
   const handlePlaceOrder = async () => {
@@ -34,7 +36,7 @@ function OrderScreen({ navigation }) {
           neck,
           inseam,
         },
-        status: 'pending',
+        imageUri, // Include image URI in the order
       });
 
       // Show confirmation message
@@ -54,7 +56,29 @@ function OrderScreen({ navigation }) {
     setSleeveLength('');
     setNeck('');
     setInseam('');
+    setImageUri(null); // Reset image URI
     setOrderPlaced(false);
+  };
+
+  const handleImagePick = async () => {
+    // Ask for permission to access the photo library
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Alert.alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.uri);
+    }
   };
 
   return (
@@ -70,6 +94,11 @@ function OrderScreen({ navigation }) {
 
       {!orderPlaced && (
         <>
+          <View style={styles.uploadImage}>
+          <Button title="Upload Image" onPress={handleImagePick} color="#ff4468"  />
+          </View>
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
+          
           <TextInput
             placeholder="Product Name"
             style={styles.input}
@@ -196,6 +225,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  imagePreview: {
+    width: 200,
+    height: 200,
+    marginVertical: 10,
+    borderRadius: 10,
+    resizeMode: 'contain', // Ensures the image aspect ratio is maintained
+    alignSelf: 'center', // Center the image
   },
 });
 

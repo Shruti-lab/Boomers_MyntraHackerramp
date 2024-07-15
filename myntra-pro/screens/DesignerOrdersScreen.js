@@ -75,7 +75,7 @@ function DesignerOrdersScreen() {
                 value={quoteMap[order.id] || ''}
                 onChangeText={(value) => handleChangeQuote(order.id, value)}
               />
-              <Button title="Send Quote" onPress={() => handleSendQuote(order.id)} />
+              <Button title="Send Quote" onPress={() => handleSendQuote(order.id)} style={styles.sendQuote}/>
             </View>
           ))
         )}
@@ -85,6 +85,7 @@ function DesignerOrdersScreen() {
 }
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     padding: 20,
@@ -134,6 +135,9 @@ const styles = StyleSheet.create({
     color: '#D3D3D3',
     textAlign: 'center',
   },
+  sendQuote:{
+    color:'#ff4468'
+  }
 });
 
 export default DesignerOrdersScreen;

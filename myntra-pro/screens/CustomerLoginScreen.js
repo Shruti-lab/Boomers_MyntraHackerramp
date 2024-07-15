@@ -58,7 +58,7 @@ function CustomerLoginScreen({ navigation }) {
       </View>
       <Text style={styles.textSmall}>Don't have an account?</Text>
       <View style={styles.registerButton}>
-        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('CustomerRegister')} />
+        <Button color="#ff4468" title="Register" onPress={() => navigation.navigate('CustomerRegister') }/>
       </View>
     </View>
   );
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginBottom:25
   },
   frontImage: {
     width: 350,
@@ -125,6 +126,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginVertical: 10,
     width: '80%',
+    marginTop:20,
+    marginBottom:25,
   },
 });
 

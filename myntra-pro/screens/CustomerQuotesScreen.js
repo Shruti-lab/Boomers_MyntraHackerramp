@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import app from '../firebaseConfig'; // Adjust path as per your structure
 import OrderDetailsScreen from './OrderDetailsScreen'; // Import OrderDetailsScreen
@@ -32,7 +32,8 @@ function CustomerQuotesScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView>
+      <View style={styles.container}>
       {/* Conditional rendering based on selectedOrder state */}
       {selectedOrder ? (
         <View style={styles.orderDetailsContainer}>
@@ -54,6 +55,7 @@ function CustomerQuotesScreen({ navigation }) {
         />
       )}
     </View>
+    </SafeAreaView>
   );
 }
 

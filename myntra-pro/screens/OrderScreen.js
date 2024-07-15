@@ -13,7 +13,7 @@ function OrderScreen({ navigation }) {
   const [neck, setNeck] = useState('');
   const [inseam, setInseam] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [imageUri, setImageUri] = useState(null); // State for image URI
+  const [showImagePreview, setShowImagePreview] = useState(false); // State to toggle image preview
   const db = getFirestore(app);
 
   const handlePlaceOrder = async () => {
@@ -36,7 +36,6 @@ function OrderScreen({ navigation }) {
           neck,
           inseam,
         },
-        imageUri, // Include image URI in the order
         status: 'pending', // Include status field
         quotes: {}, // Initialize quotes field as an empty hashmap
       });
@@ -58,7 +57,7 @@ function OrderScreen({ navigation }) {
     setSleeveLength('');
     setNeck('');
     setInseam('');
-    setImageUri(null); // Reset image URI
+    setShowImagePreview(false); // Hide image preview
     setOrderPlaced(false);
   };
 
@@ -79,43 +78,31 @@ function OrderScreen({ navigation }) {
     });
   
     if (!result.cancelled) {
-      if (result.uri) {
-        // Handle the cropped image upload here
-        try {
-          // Call the function to upload the image to your server
-          const uploadResult = await uploadImage(result.uri);
-          // Process the uploadResult as needed
-          // For example, display a success message or further action
-          Alert.alert("Image uploaded successfully");
-        } catch (error) {
-          // Handle upload error
-          Alert.alert("Error uploading image: " + error.message);
-        }
-      }
-    } else {
-      Alert.alert("Image selection cancelled");
+      setShowImagePreview(true); // Show image preview
     }
   };
-  
-  
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
-          <View style={styles.myntraInsider}>
-            <View style={styles.logoImage}>
-              <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
-            </View>
-            <View style={styles.myntraTextContainer}>
-              <Text style={styles.myntraText}>Enter Order Details</Text>
-            </View>
+          <View style={styles.header}>
+            <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
+            <Text style={styles.headerText}>Enter Order Details</Text>
           </View>
 
           {!orderPlaced && (
             <>
-              {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
-              <View style={styles.uploadImage} marginStart='50'>
-                <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" marginStart='50' />
+              {showImagePreview && (
+                <View style={styles.imagePreviewContainer}>
+                  <Image 
+                    source={ require('../assets/dressImage.png') } 
+                    style={styles.imagePreview} 
+                  />
+                </View>
+              )}
+              <View style={styles.uploadButtonContainer}>
+                <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" />
               </View>
 
               <TextInput
@@ -166,7 +153,9 @@ function OrderScreen({ navigation }) {
                 onChangeText={setInseam}
                 keyboardType="numeric"
               />
-              <Button title="Get Quotes" onPress={handlePlaceOrder} color="#ff4468" />
+              <View style={styles.buttonContainer}>
+                <Button title="Get Quotes" onPress={handlePlaceOrder} color="#ff4468" />
+              </View>
             </>
           )}
 
@@ -183,64 +172,50 @@ function OrderScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  uploadImage: {
-    marginBottom: 30,
-    
-  },
-  myntraTextContainer: {
-    alignItems: 'center',
-    width: '80%',
-  },
-  logo: {
-    width: 35,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  myntraImage: {
-    paddingTop: 10,
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-  },
-  myntraText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginStart: 4,
-    top: 0,
-  },
-  myntraInsider: {
-    marginTop: 30,
-    flexDirection: 'row',
-    borderWidth: 2,
-    borderColor: '#7f7053',
-    borderRadius: 4,
-    marginBottom: 20,
-    height: 45,
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: 'white',
-  },
   container: {
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
-    textAlign: 'center',
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  headerText: {
+    fontSize: 22,
     fontWeight: 'bold',
-    marginTop: 15,
+    color: '#ff4468',
+  },
+  imagePreviewContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  imagePreview: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    resizeMode: 'contain',
+  },
+  uploadButtonContainer: {
+    marginBottom: 20,
   },
   input: {
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 15,
+    backgroundColor: '#f0f0f0',
   },
   buttonContainer: {
-    marginTop: 20,
+    marginBottom: 20,
   },
   confirmationContainer: {
     flex: 1,
@@ -251,14 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  imagePreview: {
-    width: 200,
-    height: 200,
-    marginVertical: 10,
-    borderRadius: 10,
-    resizeMode: 'cover', // Ensures the image aspect ratio is maintained
-    alignSelf: 'center', // Center the image
+    color: '#ff4468',
   },
 });
 

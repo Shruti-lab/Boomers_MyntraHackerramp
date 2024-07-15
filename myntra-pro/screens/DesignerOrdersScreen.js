@@ -65,7 +65,7 @@ function DesignerOrdersScreen() {
             orders.map((order) => (
               <View key={order.id} style={styles.orderCard}>
                 <Image
-                  source={{ uri: order.productImage || 'https://via.placeholder.com/150' }} // Placeholder image
+                  source={{ uri: order.productImage || '../assets/dressImage.png' }} // Placeholder image
                   style={styles.productImage}
                 />
                 <View style={styles.orderContent}>

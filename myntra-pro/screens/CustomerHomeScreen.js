@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView, Image,Video} from 'react-native';
-import { ScrollView } from 'react-native-web';
+import { ScrollView, View, Text, Button, StyleSheet, SafeAreaView, Image,Video} from 'react-native';
+
 
 function CustomerHomeScreen({ navigation }) {
   return (
@@ -33,15 +33,15 @@ function CustomerHomeScreen({ navigation }) {
           </View>
           
           <View style={{display: 'flex', flexDirection: 'row',paddingRight:3, alignSelf:'center'}}>
-            <Image style={{paddingRight:6}} source={require('../assets/smallcamera.jpg')}/>
-            <Image style={{paddingHorizontal:5}} source={require('../assets/smallmic.jpg')}/>
+            <Image style={{marginRight:6}} source={require('../assets/smallcamera.jpg')}/>
+            <Image style={{marginHorizontal:5,alignSelf:'center'}} source={require('../assets/smallmic.jpg')}/>
           </View>
         </View>
       </View>
       
       
       <View style={{}} >
-        <Image style={{width:'100%',height:300}} source={require('../assets/homeimg1.png')} />
+        <Image style={{width:'100%',height:225}} source={require('../assets/homeimg1.png')} />
         <View style={{ display: 'flex',flexDirection: 'row',backgroundColor:'black', margin:10, borderRadius:20,justifyContent:'center',alignItems:'center',padding:3}}>
           <Text style={{color:'white',paddingRight:3}}>Sign Up For Exciting Deals!</Text>
           <Image style={{}}  source={require('../assets/rightarrowbutton.png')} />
@@ -54,8 +54,7 @@ function CustomerHomeScreen({ navigation }) {
           <Text>Shop live with sellers!</Text>
         </View>
         <View style={styles.playlist}>
-          <Video style={{marging:5,height:60,width:40}} source={require('../assets/liveshopvid1.mp4')}/>
-          <Video style={{marging:5,height:60,width:40}} source={require('../assets/liveshopvid2.mp4')}/>
+          
 
         </View>
         <View>

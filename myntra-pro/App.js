@@ -22,6 +22,8 @@ import CustomerRegisterScreen from './screens/CustomerRegisterScreen';
 import CustomerQuotesScreen from './screens/CustomerQuotesScreen';
 import { UserProvider } from './components/UserContext';
 import EmptyScreen from './screens/EmptyScreen';
+
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -109,6 +111,8 @@ function BottomTabNavigator() {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'Orders Pending') {
             iconName = focused ? 'shirt' : 'shirt-outline';
+          }else if (route.name === 'New') {
+            iconName = focused ? imh = require('./assets/new.png') : 'shirt-outline';
           }
 
           return (
@@ -140,6 +144,7 @@ function BottomTabNavigator() {
     >
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
       <Tab.Screen name="New Orders" component={DesignerOrdersScreen} />
+      <Tab.Screen name="New" component={EmptyScreen}/>
       <Tab.Screen name="Orders Pending" component={PendingOrdersScreen} />
       <Tab.Screen name="Profile" component={ProfilePage} />
     </Tab.Navigator>

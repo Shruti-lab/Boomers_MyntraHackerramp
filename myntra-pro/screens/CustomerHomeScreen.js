@@ -27,7 +27,7 @@ function CustomerHomeScreen({ navigation }) {
 
       <View style={{padding:10, margin:10 }}>
         <View style={styles.searchbox}>
-          <View style={{paddingLeft:5,alignSelf:'center',display: 'flex', flexDirection: 'row',}}>
+          <View style={{paddingLeft:5,alignItems:'center',display: 'flex', flexDirection: 'row',}}>
             <Image source={require('../assets/smallsearch.jpg')}/>
             <Text style={{paddingLeft:5}}>Search for brands ...</Text>
           </View>
@@ -49,16 +49,21 @@ function CustomerHomeScreen({ navigation }) {
       </View>
       
       <View>
-        <View>
-          <Text style={{color:'#FF0000'}}>Myntra Live</Text>
+        <View style={{marginLeft:10}}>
+          <Text style={{color:'#FF0000', fontWeight:'bold'}}>Myntra Live</Text>
           <Text>Shop live with sellers!</Text>
+        </View>
+        <View style={{display: 'flex', flexDirection: 'row',}}>
+        <Image style={{width:120,height:200,margin:20,marginHorizontal:10}} source={require('../assets/liveshop1.png')}/>
+        <Image style={{width:120,height:200,margin:20,marginHorizontal:10}} source={require('../assets/liveshop2.png')}/>
+
         </View>
         <View style={styles.playlist}>
           
 
         </View>
         <View>
-          <Image style={{width:'100%',height:200}} source={require('../assets/homeimg2.png')}/>
+          <Image style={{width:'100%',height:300,marginHorizontal:2}} source={require('../assets/homeimg2.png')}/>
           <Image style={{width:'100%',height:600}} source={require('../assets/homeimg3.png')}/>
 
         </View>

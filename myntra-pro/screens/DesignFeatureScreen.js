@@ -1,42 +1,123 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, Image , Alert} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Import icons
+import Carousel from './Carousel'; // Import the new Carousel component
 
 const products = [
   {
     id: '1',
-    name: 'Fashion Product 1',
-    image: require('../assets/T-shirt.png'), // Update with actual path to your images
+    name: 'Jumpsuit',
+    image: require('../assets/Jumpsuit.png'),
   },
   {
     id: '2',
-    name: 'Fashion Product 2',
-    image: require('../assets/T-shirt.png'), // Update with actual path to your images
+    name: 'Lehenga',
+    image: require('../assets/designerLehenga2.png'),
   },
   {
     id: '3',
-    name: 'Fashion Product 3',
-    image: require('../assets/T-shirt.png'), // Update with actual path to your images
+    name: 'Shirt',
+    image: require('../assets/shirt1.png'),
   },
   {
     id: '4',
-    name: 'Fashion Product 4',
-    image: require('../assets/T-shirt.png'), // Update with actual path to your images
+    name: 'Kurti',
+    image: require('../assets/kurta2.png'),
   },
   {
     id: '5',
-    name: 'Fashion Product 5',
-    image: require('../assets/T-shirt.png'), // Update with actual path to your images
+    name: 'Designer Blause',
+    image: require('../assets/designerBlause1.png'),
   },
   {
     id: '6',
-    name: 'Fashion Product 6',
-    image: require('../assets/T-shirt.png'), // Update with actual path to your images
+    name: 'Salwar Kamiz',
+    image: require('../assets/designerSalwar1.png'),
   },
-  // Add more products as needed
+  {
+    id: '7',
+    name: 'Dress',
+    image: require('../assets/dress2.png'),
+  },
+];
+
+const adds = [
+  {
+    id: '1',
+    name: 'Jumpsuit',
+    image: require('../assets/Jumpsuit.png'),
+  },
+  {
+    id: '2',
+    name: 'Lehenga',
+    image: require('../assets/designerLehenga2.png'),
+  },
+  {
+    id: '3',
+    name: 'Shirt',
+    image: require('../assets/shirt1.png'),
+  },
+  {
+    id: '4',
+    name: 'Kurti',
+    image: require('../assets/kurta2.png'),
+  },
+  {
+    id: '5',
+    name: 'Designer Blause',
+    image: require('../assets/designerBlause1.png'),
+  },
+  {
+    id: '6',
+    name: 'Salwar Kamiz',
+    image: require('../assets/designerSalwar1.png'),
+  },
+  {
+    id: '7',
+    name: 'Dress',
+    image: require('../assets/dress2.png'),
+  },
+];
+
+const types = [
+  {
+    id: '1',
+    name: 'Formal',
+    image: require('../assets/formal.png'),
+  },
+  {
+    id: '2',
+    name: 'Casual',
+    image: require('../assets/casual.png'),
+  },
+  {
+    id: '3',
+    name: 'Occasional',
+    image: require('../assets/occasional2.png'),
+  },
+  {
+    id: '4',
+    name: 'Party',
+    image: require('../assets/party2.png'),
+  },
 ];
 
 function DesignFeatureScreen({ navigation }) {
-  const renderItem = ({ item }) => (
+  const renderItem1 = ({ item }) => (
+    <TouchableOpacity style={styles.typeContainer} onPress={() => handleProductPress(item)}>
+      <Image source={item.image} style={styles.typeImage} />
+      <Text style={styles.typeText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
+  const renderItem2 = ({ item }) => (
+    <TouchableOpacity style={styles.itemContainer} onPress={() => handleProductPress(item)}>
+      <Image source={item.image} style={styles.itemImage} />
+      <Text style={styles.itemText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
+  const renderItem3 = ({ item }) => (
     <TouchableOpacity style={styles.itemContainer} onPress={() => handleProductPress(item)}>
       <Image source={item.image} style={styles.itemImage} />
       <Text style={styles.itemText}>{item.name}</Text>
@@ -44,35 +125,155 @@ function DesignFeatureScreen({ navigation }) {
   );
 
   const handleProductPress = (item) => {
-    // Handle product click, navigate or show more details
     Alert.alert('Product Clicked', `You clicked on ${item.name}`);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Fashion Products</Text>
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.flatListContainer}
-      />
+      <View style={styles.header}>
+        <View style={styles.designHeader}>
+          <Text style={styles.title}>Design Page</Text>
+        </View>
+        <View style={styles.iconContainer}>
+          <Icon name="notifications-outline" size={24} color="#000" />
+          <Icon name="heart-outline" size={24} color="#000" style={styles.icon} />
+          <Icon name="bag-outline" size={24} color="#000" style={styles.icon} />
+        </View>
+      </View>
+      <ScrollView>
+        <View style={styles.carouselWrapper}>
+          <Carousel images={adds.map(add => add.image)} scrollInterval={3000} />
+        </View>
+        <View style={styles.typeView}>
+          <FlatList
+            data={types}
+            renderItem={renderItem1}
+            keyExtractor={(item) => item.id}
+            horizontal
+            contentContainerStyle={styles.typeViewContainer}
+          />
+        </View>
+        <View style={styles.subheading}>
+          <Text style={styles.subheadingText}>Choose Your Fashion</Text>
+          <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
+        </View>
+        <FlatList
+          data={products}
+          renderItem={renderItem2}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+        />
+        <View style={styles.instructions}>
+          <Text style={styles.stepsTitle}>Get Your Dream Outfit in 4 Easy steps</Text>
+        </View>
+        <View style={styles.stepsContainer}>
+          <View style={styles.stepBox}>
+            <Text style={styles.stepCount}>Step 1</Text>
+            <Text style={styles.stepText}>Select the garment of your choice or upload an image</Text>
+          </View>
+          <View style={styles.stepBox}>
+            <Text style={styles.stepCount}>Step 2</Text>
+            <Text style={styles.stepText}>An assigned designer will work for your requirements</Text>
+          </View>
+          <View style={styles.stepBox}>
+            <Text style={styles.stepCount}>Step 3</Text>
+            <Text style={styles.stepText}>Review the estimate and make the payment</Text>
+          </View>
+          <View style={styles.stepBox}>
+            <Text style={styles.stepCount}>Step 4</Text>
+            <Text style={styles.stepText}>Your customized garment will be delivered to your destination</Text>
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  stepCount: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  designHeader: {
+    marginTop: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+  },
+  icon: {
+    marginLeft: 15,
+  },
+  tagline: {
+    color: '#383035',
+  },
+  subheadingText: {
+    fontSize: 18,
+    color: '#513438',
+    fontWeight: 'bold',
+  },
+  subheading: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  steps: {
+    marginTop: 10,
+  },
+  stepsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#430541',
+  },
+  instructions: {
+    marginStart: 15,
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  typeView: {
+    alignItems: 'center',
+    marginBottom: 30,
+    marginStart: 5,
+  },
+  typeContainer: {
+    marginRight: 15,
+    alignItems: 'center',
+  },
+  typeImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 40,
+    resizeMode: 'cover',
+  },
+  typeText: {
+    marginTop: 5,
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#636363',
+  },
   container: {
     flex: 1,
     paddingTop: 20,
     backgroundColor: '#FFFFFF',
   },
   title: {
-    fontSize: 24,
+    fontSize: 15,
+    fontWeight: 'bold',
     marginBottom: 20,
-    paddingHorizontal: 20,
+    borderWidth: 1,
+    paddingStart: 10,
+    paddingEnd: 8,
+    padding: 5,
+    borderRadius: 4,
+    borderColor: "#89cff0",
+    backgroundColor: '#d5ffff',
   },
   flatListContainer: {
     paddingLeft: 20,
@@ -85,55 +286,36 @@ const styles = StyleSheet.create({
     width: 150,
     height: 200,
     borderRadius: 10,
-    resizeMode:'stretch'
-    
+    resizeMode: 'stretch',
   },
   itemText: {
     marginTop: 5,
     textAlign: 'center',
     fontSize: 14,
+    color: '#636363',
   },
-  topbox: {
-    paddingTop: 25,
-    display: 'flex',
+  stepsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 3,
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
   },
-  myntrabox: {
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: '#FAF3EB',
-    padding: 7,
+  stepBox: {
+    width: '46%',
+    padding: 10,
+    backgroundColor: '#fff4f2',
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#C8AA5E',
+    marginBottom: 10,
+    alignItems: 'flex-start',
   },
-  pinkarrow: {
-    height: 8,
-    width: 12,
+  stepText: {
+    fontSize: 12,
+    color: '#383035',
+    textAlign: 'left',
   },
-  framebox: {
-    flex: 0.3,
-    paddingTop: 5,
-  },
-  toprightframe: {
-    height: 22,
-    width: 100,
-  },
-  searchbox: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderWidth: 2,
-    shadowColor: 'black',
-    borderRadius: 25,
-    shadowOffset: 20,
-    padding: 5,
-    justifyContent: 'space-between',
-  },
-  playlist: {
-    display: 'flex',
-    flexDirection: 'row',
+  carouselWrapper: {
+    height: 250,
+    marginBottom: 30,
   },
 });
 

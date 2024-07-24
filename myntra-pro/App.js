@@ -21,7 +21,7 @@ import CustomerLoginScreen from './screens/CustomerLoginScreen';
 import CustomerRegisterScreen from './screens/CustomerRegisterScreen';
 import CustomerQuotesScreen from './screens/CustomerQuotesScreen';
 import { UserProvider } from './components/UserContext';
-import EmptyScreen from './screens/EmptyScreen';
+import DesignFeatureScreen from './screens/DesignFeatureScreen';
 
 
 const Stack = createStackNavigator();
@@ -41,8 +41,8 @@ function CustomerBottomTabNavigator() {
             iconName = focused ? 'list' : 'list-outline';
           } else if (route.name === 'Quotes') {
             iconName = focused ? 'pricetag' : 'pricetag-outline';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'person' : 'person-outline';
+          } else if (route.name === 'New') {
+            iconName = focused ? 'logo-designernews' : 'logo-designernews';
           }
 
           return (
@@ -73,7 +73,7 @@ function CustomerBottomTabNavigator() {
       style={styles.BottomTabNavigator}
     >
       <Tab.Screen name="Home" component={CustomerHomeScreen} />
-      <Tab.Screen name="New" component={EmptyScreen} />
+      <Tab.Screen name="New" component={DesignFeatureScreen} />
       <Tab.Screen name="Orders" component={OrderScreen} />
       <Tab.Screen name="Quotes" component={CustomerQuotesScreen} />
     </Tab.Navigator>
@@ -144,7 +144,6 @@ function BottomTabNavigator() {
     >
       <Tab.Screen name="Home" component={DesignersHomeScreen} />
       <Tab.Screen name="New Orders" component={DesignerOrdersScreen} />
-      <Tab.Screen name="New" component={EmptyScreen}/>
       <Tab.Screen name="Orders Pending" component={PendingOrdersScreen} />
       <Tab.Screen name="Profile" component={ProfilePage} />
     </Tab.Navigator>
@@ -166,9 +165,6 @@ function App() {
         <Stack.Screen name="CustomerLogin" component={CustomerLoginScreen} />
         <Stack.Screen name="CustomerRegister" component={CustomerRegisterScreen} />
         <Stack.Screen name="CustomerPage" component={CustomerBottomTabNavigator} />
-        
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Image, SafeAreaView } from 'react-native';
 import { getFirestore, collection, query, onSnapshot, doc, updateDoc, where } from 'firebase/firestore';
-import app from '../firebaseConfig';
+import { firestore } from '../firebaseConfig'; // Ensure firestore is correctly imported
 import { FontAwesome5 } from '@expo/vector-icons'; // Importing icons
 
 function DesignerOrdersScreen() {
   const [orders, setOrders] = useState([]);
   const [quoteMap, setQuoteMap] = useState({});
-  const db = getFirestore(app);
+  const db = firestore;
 
   useEffect(() => {
     const q = query(collection(db, 'orders'), where('status', '==', 'pending'));
@@ -51,12 +51,12 @@ function DesignerOrdersScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.myntraInsider}>
-          <View style={styles.logoImage}>
-            <Image source={require('../assets/logo.png')} style={styles.logo} />
-          </View>
-          <Text style={styles.myntraText}>New Orders</Text>
-          <Image source={require('../assets/insiderCrown.png')} style={styles.myntraImage} />
+        <View style={styles.logoImage}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
         </View>
+        <Text style={styles.myntraText}>New Orders</Text>
+        <Image source={require('../assets/insiderCrown.png')} style={styles.myntraImage} />
+      </View>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={orders.length === 0 ? styles.noOrdersContainer : styles.scrollContainer}>
           {orders.length === 0 ? (
@@ -64,10 +64,17 @@ function DesignerOrdersScreen() {
           ) : (
             orders.map((order) => (
               <View key={order.id} style={styles.orderCard}>
-                <Image
-                  source={require('../assets/dressImage.png')} // Placeholder image
-                  style={styles.productImage}
-                />
+                {order.imageUri ? (
+                  <Image
+                    source={{ uri: order.imageUri }} // Use the URI from Firestore
+                    style={styles.productImage}
+                  />
+                ) : (
+                  <Image
+                    source={require('../assets/dressImage.png')} // Fallback image
+                    style={styles.productImage}
+                  />
+                )}
                 <View style={styles.orderContent}>
                   <Text style={styles.customerName}>Product: {order.productName}</Text>
                   <View style={styles.measurementsContainer}>
@@ -295,7 +302,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     marginRight: 15,
-    resizeMode:'contain'
+    resizeMode: 'contain',
   },
   orderContent: {
     flex: 1,

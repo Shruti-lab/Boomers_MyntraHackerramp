@@ -20,9 +20,22 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
       quality: 1,
     });
 
-    if (!result.canceled) {
-      setImages([...images, result.uri]);
+    // Log the result for debugging
+    console.log(result);
+
+    if (result.canceled) {
+      Alert.alert('Image picker canceled');
+      return;
     }
+
+    if (!result.assets || !result.assets[0] || !result.assets[0].uri) {
+      Alert.alert('Uri not found');
+      return;
+    }
+
+    const uri = result.assets[0].uri;
+
+    setImages((prevImages) => [...prevImages, uri]);
   };
 
   return (
@@ -44,7 +57,7 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
         <Text style={styles.sectionTitle}>Quotes Sent:</Text>
         <FlatList
           data={order.designerQuotes}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           renderItem={({ item }) => (
             <View style={styles.quoteContainer}>
               <Text style={styles.quoteText}>{item.quote}</Text>
@@ -60,7 +73,9 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
           horizontal
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Image source={{ uri: item }} style={styles.image} />
+            <View style={styles.imageContainer}> 
+              <Image source={{ uri: item }} style={styles.image} />
+            </View>
           )}
           ListEmptyComponent={() => <Text style={styles.noImagesText}>No images uploaded yet.</Text>}
         />
@@ -68,16 +83,16 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
           <Text style={styles.uploadButtonText}>Upload Image</Text>
         </TouchableOpacity>
       </ScrollView>
-
-      {/* Button to navigate back */}
-      <TouchableOpacity style={styles.backButton} onPress={onBackToOrders}>
-        <Text style={styles.buttonText}>Back to Orders</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  imageContainer:{
+    alignItems:'center',
+    width:'100%',
+    justifyContent:'center'
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',

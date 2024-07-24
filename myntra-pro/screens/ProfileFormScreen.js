@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebaseConfig'; // Adjust the path according to your project structure
 
 const ProfileFormScreen = ({ navigation }) => {
@@ -11,24 +13,24 @@ const ProfileFormScreen = ({ navigation }) => {
   const [experience, setExperience] = useState('');
   const [expertise, setExpertise] = useState('');
   const [user, setUser] = useState(null);
-  const [profileExists, setProfileExists] = useState(false); // State to track if profile exists
+  const [profileExists, setProfileExists] = useState(false);
+  const [imageUri, setImageUri] = useState(''); // State for selected image
 
   useEffect(() => {
     const auth = getAuth(app);
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
-        await checkProfileExists(user.uid); // Check if profile exists for the user
+        await checkProfileExists(user.uid);
       } else {
         Alert.alert('User not authenticated');
-        navigation.navigate('Login'); // Redirect to login if user is not authenticated
+        navigation.navigate('Login');
       }
     });
 
-    return () => unsubscribe(); // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
-  // Function to check if profile exists for the current user
   const checkProfileExists = async (userId) => {
     const db = getFirestore(app);
     const profileRef = doc(db, 'profiles', userId);
@@ -42,6 +44,7 @@ const ProfileFormScreen = ({ navigation }) => {
         setQualification(profileData.qualification || '');
         setExperience(profileData.experience || '');
         setExpertise(profileData.expertise || '');
+        setImageUri(profileData.imageUri || ''); // Load imageUri from profile if available
         setProfileExists(true);
       } else {
         setProfileExists(false);
@@ -52,7 +55,6 @@ const ProfileFormScreen = ({ navigation }) => {
     }
   };
 
-  // Function to handle form submission
   const handleSubmit = async () => {
     if (!user) {
       Alert.alert('User not authenticated');
@@ -60,23 +62,57 @@ const ProfileFormScreen = ({ navigation }) => {
     }
 
     const db = getFirestore(app);
+    const storage = getStorage(app);
     const userDocRef = doc(db, 'profiles', user.uid);
 
     try {
+      // Upload image if selected
+      let imageUrl = '';
+      if (imageUri) {
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
+        const imageRef = ref(storage, `profiles/${user.uid}/profileImage`);
+        await uploadBytes(imageRef, blob);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+
       await setDoc(userDocRef, {
         name,
         dob,
         qualification,
         experience,
         expertise,
+        imageUri: imageUrl, // Save the image URL
       });
 
       console.log('Profile details saved successfully');
-      navigation.navigate('DesignerPage'); // Navigate to the desired screen after saving profile details
+      navigation.navigate('DesignerPage');
     } catch (error) {
       console.error('Error saving profile details: ', error);
       Alert.alert('Error', 'Failed to save profile details');
     }
+  };
+
+  const handleImagePick = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (result.canceled) {
+      Alert.alert('Image picker canceled');
+      return;
+    }
+
+    if (!result.assets || !result.assets[0] || !result.assets[0].uri) {
+      Alert.alert('Uri not found');
+      return;
+    }
+
+    const uri = result.assets[0].uri;
+
+    setImageUri(uri); 
   };
 
   return (
@@ -91,6 +127,18 @@ const ProfileFormScreen = ({ navigation }) => {
       </View>
       
       <View style={styles.inputContainer}>
+        {imageUri ? (
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: imageUri }} style={styles.profileImage} />
+            <TouchableOpacity style={styles.imagePickerButton} onPress={handleImagePick}>
+              <Text style={styles.imagePickerText}>Change Image</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.imagePickerButton} onPress={handleImagePick}>
+            <Text style={styles.imagePickerText}>Pick an Image</Text>
+          </TouchableOpacity>
+        )}
         <TextInput
           placeholder="Enter Name"
           style={styles.textInput}
@@ -130,6 +178,30 @@ const ProfileFormScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  imagePickerButton: {
+    borderColor: '#d3d3d3',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    marginBottom: 10,
+  },
+  imagePickerText: {
+    color: '#ff4468',
+    fontSize: 16,
+  },
   submitButton: {
     width: 120,
     marginBottom: 20,
@@ -142,12 +214,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 35,
     height: 30,
-    resizeMode: 'contain',
-  },
-  myntraImage: {
-    paddingTop: 10,
-    width: 60,
-    height: 60,
     resizeMode: 'contain',
   },
   myntraText: {

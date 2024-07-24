@@ -2,10 +2,10 @@ import React from 'react';
 import {Text, StyleSheet, SafeAreaView} from 'react-native';
 
 
-function EmptyScreen({ navigation }) {
+function DesignFeatureScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>emptyyyyyyyy</Text>
+      <Text></Text>
     </SafeAreaView>
   );
 }
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default EmptyScreen;
+export default DesignFeatureScreen;

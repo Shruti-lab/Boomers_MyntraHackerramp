@@ -45,38 +45,29 @@ const adds = [
   {
     id: '1',
     name: 'Jumpsuit',
-    image: require('../assets/Jumpsuit.png'),
+    image: require('../assets/adds/add1.png'),
   },
   {
     id: '2',
     name: 'Lehenga',
-    image: require('../assets/designerLehenga2.png'),
+    image: require('../assets/adds/add6.png'),
   },
   {
     id: '3',
     name: 'Shirt',
-    image: require('../assets/shirt1.png'),
+    image: require('../assets/adds/add3.png'),
   },
   {
     id: '4',
     name: 'Kurti',
-    image: require('../assets/kurta2.png'),
+    image: require('../assets/adds/add7.png'),
   },
   {
     id: '5',
     name: 'Designer Blause',
-    image: require('../assets/designerBlause1.png'),
+    image: require('../assets/adds/add5.png'),
   },
-  {
-    id: '6',
-    name: 'Salwar Kamiz',
-    image: require('../assets/designerSalwar1.png'),
-  },
-  {
-    id: '7',
-    name: 'Dress',
-    image: require('../assets/dress2.png'),
-  },
+ 
 ];
 
 const types = [

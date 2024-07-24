@@ -62,12 +62,15 @@ const Carousel = ({ images, scrollInterval = 3000 }) => {
 
 const styles = StyleSheet.create({
   carouselContainer: {
-    height: 250, // Adjust this height as needed
+    height: 250,
+    padding:10 ,
+    marginBottom:20,
+    marginStart:9// Adjust this height as needed
   },
   image: {
     width,
     height: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'stretch',
   },
   dotContainer: {
     position: 'absolute',
@@ -76,6 +79,7 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom:8
   },
   dot: {
     height: 10,

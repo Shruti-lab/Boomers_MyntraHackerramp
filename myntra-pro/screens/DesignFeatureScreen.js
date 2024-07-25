@@ -39,6 +39,21 @@ const products = [
     name: 'Dress',
     image: require('../assets/dress2.png'),
   },
+  {
+    id: '8',
+    name: 'Top',
+    image: require('../assets/top1.png'),
+  },
+  {
+    id: '9',
+    name: 'Jacket',
+    image: require('../assets/jacket1.png'),
+  },
+  {
+    id: '10',
+    name: 'Trouser',
+    image: require('../assets/trouser1.png'),
+  },
 ];
 
 const adds = [
@@ -116,6 +131,9 @@ function DesignFeatureScreen({ navigation }) {
   );
 
   const handleProductPress = (item) => {
+    if(item.name === 'Jumpsuit')
+      navigation.navigate('Jumpsuit');
+    else
     Alert.alert('Product Clicked', `You clicked on ${item.name}`);
   };
 
@@ -132,7 +150,6 @@ function DesignFeatureScreen({ navigation }) {
         </View>
       </View>
       <ScrollView>
-        
         <View style={styles.typeView}>
           <FlatList
             data={types}
@@ -166,13 +183,16 @@ function DesignFeatureScreen({ navigation }) {
             <Text style={styles.stepText}>Your customized garment will be delivered to your destination</Text>
           </View>
         </View>
-        <View style={styles.orderImageContainer}>
+        <TouchableOpacity 
+          style={styles.orderImageContainer} 
+          onPress={() => navigation.navigate('CustomerChoice')}
+        >
           <Image style={styles.orderScreenImage} source={require('../assets/designer10.png')}/>
           <View style={styles.orderTextContainer}>
             <Text style={styles.ordertext}>Get your Choice Custom-tailored </Text>
             <Icon name="arrow-forward-circle" size={22} color="#513438" style={styles.iconContainer}/>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.subheading}>
           <Text style={styles.subheadingText}>Choose Your Fashion</Text>
           <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
@@ -185,8 +205,6 @@ function DesignFeatureScreen({ navigation }) {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.flatListContainer}
         />
-        
-       
       </ScrollView>
     </SafeAreaView>
   );
@@ -233,10 +251,7 @@ const styles = StyleSheet.create({
     elevation:4,
     shadowColor:'black'
   },
-  carouselWrapper:{
-    borderColor:'red',
-    width:'100%'
-  },
+ 
   stepCount: {
     fontWeight: 'bold',
     fontSize: 12,
@@ -279,7 +294,6 @@ const styles = StyleSheet.create({
   },
   instructions: {
     marginStart: 15,
-    marginTop: 10,
     alignItems: 'center',
   },
   typeView: {
@@ -288,6 +302,7 @@ const styles = StyleSheet.create({
     marginStart: 5,
     marginTop:10
   },
+  
   typeContainer: {
     marginRight: 15,
     alignItems: 'center',
@@ -362,8 +377,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   carouselWrapper: {
-    height: 250,
-    marginBottom: 30,
+    
+    marginBottom: 10,
   },
 });
 

@@ -22,6 +22,8 @@ import CustomerRegisterScreen from './screens/CustomerRegisterScreen';
 import CustomerQuotesScreen from './screens/CustomerQuotesScreen';
 import { UserProvider } from './components/UserContext';
 import DesignFeatureScreen from './screens/DesignFeatureScreen';
+import JumpsuitForm from './screens/Jumpsuit';
+import CustomerChoiceScreen from './screens/CustomerChoiceScreen';
 
 
 const Stack = createStackNavigator();
@@ -165,6 +167,9 @@ function App() {
         <Stack.Screen name="CustomerLogin" component={CustomerLoginScreen} />
         <Stack.Screen name="CustomerRegister" component={CustomerRegisterScreen} />
         <Stack.Screen name="CustomerPage" component={CustomerBottomTabNavigator} />
+        <Stack.Screen name="Jumpsuit" component={JumpsuitForm}/>
+        <Stack.Screen name="CustomerChoice" component={CustomerChoiceScreen}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );

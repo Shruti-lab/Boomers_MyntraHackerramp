@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, StyleSheet, ScrollView, Dimensions, Animated } from 'react-native';
 
 const { width } = Dimensions.get('window');
+const carouselWidth = width * 0.8; // Adjust the width to 80% of the screen width
 
 const Carousel = ({ images, scrollInterval = 3000 }) => {
   const scrollViewRef = useRef();
@@ -19,7 +20,7 @@ const Carousel = ({ images, scrollInterval = 3000 }) => {
   useEffect(() => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
-        x: currentIndex * width,
+        x: currentIndex * carouselWidth,
         animated: true,
       });
     }
@@ -30,7 +31,7 @@ const Carousel = ({ images, scrollInterval = 3000 }) => {
     { useNativeDriver: false }
   );
 
-  const position = Animated.divide(scrollX, width);
+  const position = Animated.divide(scrollX, carouselWidth);
 
   return (
     <View style={styles.carouselContainer}>
@@ -64,8 +65,9 @@ const Carousel = ({ images, scrollInterval = 3000 }) => {
 
 const styles = StyleSheet.create({
   carouselContainer: {
-    height: 250,
-    margin: 15,
+    height: 180, // Adjusted height to fit better within the layout
+    width: carouselWidth,
+    alignSelf: 'center',
     borderRadius: 8,
     overflow: 'hidden',
     borderColor: '#926f34',
@@ -75,15 +77,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+    marginVertical: 20,
   },
   imageWrapper: {
-    width,
+    width: carouselWidth,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width :'100%', // match the screen width exactly
+    width: '100%', // match the carousel width exactly
     height: '100%',
     resizeMode: 'stretch',
   },

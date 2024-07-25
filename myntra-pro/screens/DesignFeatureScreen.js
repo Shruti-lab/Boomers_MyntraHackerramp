@@ -167,9 +167,10 @@ function DesignFeatureScreen({ navigation }) {
           </View>
         </View>
         <View style={styles.orderImageContainer}>
-          <Image style={styles.orderScreenImage} source={require('../assets/designer9.jpg')}/>
+          <Image style={styles.orderScreenImage} source={require('../assets/designer10.png')}/>
           <View style={styles.orderTextContainer}>
-          <Text style={styles.ordertext}>Get your Choice Custom-tailored </Text>
+            <Text style={styles.ordertext}>Get your Choice Custom-tailored </Text>
+            <Icon name="arrow-forward-circle" size={22} color="#513438" style={styles.iconContainer}/>
           </View>
         </View>
         <View style={styles.subheading}>
@@ -192,23 +193,30 @@ function DesignFeatureScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  iconContainer:{
+    paddingBottom:10
+  },
   orderTextContainer:{
     width:'90%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    borderBottomWidth:1,
+    borderLeftWidth:1,
+    borderRightWidth:1,
+    width:'90%',
     
+    borderBottomLeftRadius:15,
+    borderBottomRightRadius:15,
   },
   ordertext:{
     fontSize:18,
     marginBottom:5,
     fontWeight:'bold',
     color:'#513438',
-    borderBottomWidth:1,
-    borderLeftWidth:1,
-    borderRightWidth:1,
-    width:'100%',
-    textAlign:'center',
+    paddingTop:5,
     borderBottomLeftRadius:15,
     borderBottomRightRadius:15,
-   
   },
   orderScreenImage:{
     width:'90%',
@@ -216,17 +224,16 @@ const styles = StyleSheet.create({
     height:250,
     borderTopLeftRadius:15,
     borderTopRightRadius:15,
-
   },
   orderImageContainer:{
     alignItems:'center',
     width:'auto',
     marginTop:10,
     marginBottom:20,
-    
+    elevation:4,
+    shadowColor:'black'
   },
   carouselWrapper:{
-    
     borderColor:'red',
     width:'100%'
   },
@@ -272,13 +279,14 @@ const styles = StyleSheet.create({
   },
   instructions: {
     marginStart: 15,
-    marginTop: 30,
+    marginTop: 10,
     alignItems: 'center',
   },
   typeView: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 10,
     marginStart: 5,
+    marginTop:10
   },
   typeContainer: {
     marginRight: 15,
@@ -300,6 +308,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: '#FFFFFF',
+    
   },
   title: {
     fontSize: 15,
@@ -336,14 +345,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
-    marginTop: 20,
+    marginTop: 10,
+    margin:3
   },
   stepBox: {
-    width: '46%',
+    width: '48%',
     padding: 10,
     backgroundColor: '#fff4f2',
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 7,
     alignItems: 'flex-start',
   },
   stepText: {

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ScrollView, Image, SafeAreaView, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ScrollView, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import app from '../firebaseConfig';
 import * as ImagePicker from 'expo-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 function JumpsuitForm({ navigation }) {
   const [productName, setProductName] = useState('');
@@ -13,10 +14,10 @@ function JumpsuitForm({ navigation }) {
   const [sleeveLength, setSleeveLength] = useState('');
   const [neck, setNeck] = useState('');
   const [inseam, setInseam] = useState('');
-  const [color, setColor] = useState(''); // State for color
-  const [material, setMaterial] = useState(''); // State for material
+  const [color, setColor] = useState('');
+  const [material, setMaterial] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [imageUri, setImageUri] = useState(null); // State to hold image URI
+  const [imageUri, setImageUri] = useState(null);
   const db = getFirestore(app);
 
   const handlePlaceOrder = async () => {
@@ -41,7 +42,7 @@ function JumpsuitForm({ navigation }) {
         material,
         status: 'pending',
         quotes: {},
-        imageUri, // Include the image URI in the order
+        imageUri,
       });
 
       setOrderPlaced(true);
@@ -59,9 +60,9 @@ function JumpsuitForm({ navigation }) {
     setSleeveLength('');
     setNeck('');
     setInseam('');
-    setColor(''); // Reset color
-    setMaterial(''); // Reset material
-    setImageUri(null); // Reset image URI
+    setColor('');
+    setMaterial('');
+    setImageUri(null);
     setOrderPlaced(false);
   };
 
@@ -91,16 +92,30 @@ function JumpsuitForm({ navigation }) {
     }
 
     const uri = result.assets[0].uri;
-    setImageUri(uri); // Set the image URI to display the preview
+    setImageUri(uri);
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.headerPage}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Jumpsuit</Text>
+      </View>
+      
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.headerContainer}>
+          <Image source={require('../assets/Jumpsuit.png')} style={styles.imageJumpsuit} />
+          <View style={styles.textContainer}>
+            <Text style={styles.subheadingText}>Jumpsuit</Text>
+            <Text style={styles.tagline}>Get the perfect jumpsuit stitched just for you</Text>
+          </View>
+        </View>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
-            <Text style={styles.headerText}>Enter Order Details</Text>
+           
+            <Text style={styles.headerText}>Enter Details</Text>
           </View>
 
           {!orderPlaced && (
@@ -110,9 +125,9 @@ function JumpsuitForm({ navigation }) {
                   <Image source={{ uri: imageUri }} style={styles.imagePreview} />
                 </View>
               )}
-              <View style={styles.uploadButtonContainer}>
-                <Button title="Upload Image" onPress={handleImagePick} color="#ff4468" />
-              </View>
+              <TouchableOpacity style={styles.uploadButtonContainer} onPress={handleImagePick}>
+                <Text style={styles.uploadButtonText}>Upload Image</Text>
+              </TouchableOpacity>
 
               <RNPickerSelect
                 placeholder={{ label: "Select Color", value: null }}
@@ -122,7 +137,6 @@ function JumpsuitForm({ navigation }) {
                   { label: 'Red', value: 'red' },
                   { label: 'Blue', value: 'blue' },
                   { label: 'Green', value: 'green' },
-                  // Add more colors as needed
                 ]}
                 style={pickerSelectStyles}
               />
@@ -135,7 +149,6 @@ function JumpsuitForm({ navigation }) {
                   { label: 'Cotton', value: 'cotton' },
                   { label: 'Wool', value: 'wool' },
                   { label: 'Polyester', value: 'polyester' },
-                  // Add more materials as needed
                 ]}
                 style={pickerSelectStyles}
               />
@@ -189,7 +202,7 @@ function JumpsuitForm({ navigation }) {
                 keyboardType="numeric"
               />
               <View style={styles.buttonContainer}>
-                <Button title="Get Quotes" onPress={handlePlaceOrder} color="#ff4468" />
+                <Button title="Place Order" onPress={handlePlaceOrder} color="#ff4468" />
               </View>
             </>
           )}
@@ -207,16 +220,80 @@ function JumpsuitForm({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-    marginTop: 20,
-  },
-  header: {
+  headerPage: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
+  },
+  backButton: {
+    marginRight: 20,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#626262',
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 20,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    padding: 20,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 0,
+    backgroundColor:'#fff',
+    padding:20,
+    borderRadius:15,
+    
+    
+  },
+  imageJumpsuit: {
+    width: 150,
+    height: 200,
+    borderRadius: 15,
+    marginRight: 15,
+  },
+  textContainer: {
+    flex: 1,
+    marginTop:10,
+    margin:5
+  },
+  subheadingText: {
+    fontSize: 18,
+    color: '#513438',
+    fontWeight: 'bold',
+  },
+  tagline: {
+    color: '#383035',
+    marginTop: 5,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  header: {
+    
+    alignItems: 'center',
     marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    paddingBottom: 10,
   },
   logo: {
     width: 40,
@@ -225,7 +302,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   headerText: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#ff4468',
   },
@@ -234,24 +311,39 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   imagePreview: {
-    width: 200,
+    width: '100%',
     height: 200,
     borderRadius: 10,
-    resizeMode: 'contain',
+    borderColor: '#ddd',
+    borderWidth: 1,
   },
   uploadButtonContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
     marginBottom: 20,
+    marginLeft:50,
+    marginRight:50,
+    borderWidth:2,
+    borderColor:'#ff4468'
+  },
+  uploadButtonText: {
+    color: '#535353',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   input: {
-    borderColor: 'gray',
+    borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
   },
   buttonContainer: {
-    marginBottom: 20,
+    marginTop: 20,
   },
   confirmationContainer: {
     flex: 1,
@@ -272,10 +364,10 @@ const pickerSelectStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: '#ddd',
     borderRadius: 5,
     color: 'black',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     marginBottom: 15,
   },
   inputAndroid: {
@@ -283,14 +375,14 @@ const pickerSelectStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: '#ddd',
     borderRadius: 5,
     color: 'black',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     marginBottom: 15,
   },
   placeholder: {
-    color: 'gray',
+    color: '#aaa',
   },
 });
 

@@ -82,7 +82,6 @@ const adds = [
     name: 'Designer Blause',
     image: require('../assets/adds/add5.png'),
   },
- 
 ];
 
 const types = [
@@ -131,10 +130,10 @@ function DesignFeatureScreen({ navigation }) {
   );
 
   const handleProductPress = (item) => {
-    if(item.name === 'Jumpsuit')
+    if (item.name === 'Jumpsuit')
       navigation.navigate('Jumpsuit');
     else
-    Alert.alert('Product Clicked', `You clicked on ${item.name}`);
+      Alert.alert('Product Clicked', `You clicked on ${item.name}`);
   };
 
   return (
@@ -167,30 +166,42 @@ function DesignFeatureScreen({ navigation }) {
         </View>
         <View style={styles.stepsContainer}>
           <View style={styles.stepBox}>
-            <Text style={styles.stepCount}>Step 1</Text>
-            <Text style={styles.stepText}>Select the garment of your choice or upload an image</Text>
+            <Image source={require('../assets/icons/dressIcon2.png')} style={styles.stepIcon} />
+            <View style={styles.stepTextContainer}>
+              <Text style={styles.stepCount}>Step 1</Text>
+              <Text style={styles.stepText}>Select the garment of your choice or upload an image</Text>
+            </View>
           </View>
           <View style={styles.stepBox}>
-            <Text style={styles.stepCount}>Step 2</Text>
-            <Text style={styles.stepText}>An assigned designer will work for your requirements</Text>
+            <Image source={require('../assets/icons/tailorIcon.png')} style={styles.stepIcon} />
+            <View style={styles.stepTextContainer}>
+              <Text style={styles.stepCount}>Step 2</Text>
+              <Text style={styles.stepText}>An assigned designer will work for your requirements</Text>
+            </View>
           </View>
           <View style={styles.stepBox}>
-            <Text style={styles.stepCount}>Step 3</Text>
-            <Text style={styles.stepText}>Review the estimate and make the payment</Text>
+            <Image source={require('../assets/icons/estimateIcon.png')} style={styles.stepIcon} />
+            <View style={styles.stepTextContainer}>
+              <Text style={styles.stepCount}>Step 3</Text>
+              <Text style={styles.stepText}>Review the estimate and make the payment</Text>
+            </View>
           </View>
           <View style={styles.stepBox}>
-            <Text style={styles.stepCount}>Step 4</Text>
-            <Text style={styles.stepText}>Your customized garment will be delivered to your destination</Text>
+            <Image source={require('../assets/icons/deliveryIcon.png')} style={styles.stepIcon} />
+            <View style={styles.stepTextContainer}>
+              <Text style={styles.stepCount}>Step 4</Text>
+              <Text style={styles.stepText}>Your customized garment will be delivered to your destination</Text>
+            </View>
           </View>
         </View>
-        <TouchableOpacity 
-          style={styles.orderImageContainer} 
+        <TouchableOpacity
+          style={styles.orderImageContainer}
           onPress={() => navigation.navigate('CustomerChoice')}
         >
-          <Image style={styles.orderScreenImage} source={require('../assets/designer10.png')}/>
+          <Image style={styles.orderScreenImage} source={require('../assets/designer10.png')} />
           <View style={styles.orderTextContainer}>
             <Text style={styles.ordertext}>Get your Choice Custom-tailored </Text>
-            <Icon name="arrow-forward-circle" size={22} color="#513438" style={styles.iconContainer}/>
+            <Icon name="arrow-forward-circle" size={22} color="#513438" style={styles.iconContainer} />
           </View>
         </TouchableOpacity>
         <View style={styles.subheading}>
@@ -211,50 +222,53 @@ function DesignFeatureScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  iconContainer:{
-    paddingBottom:10
+  iconContainer: {
+    paddingBottom: 10
   },
-  orderTextContainer:{
-    width:'90%',
+  orderTextContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    borderBottomWidth:1,
-    borderLeftWidth:1,
-    borderRightWidth:1,
-    width:'90%',
-    
-    borderBottomLeftRadius:15,
-    borderBottomRightRadius:15,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    width: '90%',
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
-  ordertext:{
-    fontSize:18,
-    marginBottom:5,
-    fontWeight:'bold',
-    color:'#513438',
-    paddingTop:5,
-    borderBottomLeftRadius:15,
-    borderBottomRightRadius:15,
+  ordertext: {
+    fontSize: 18,
+    marginBottom: 5,
+    fontWeight: 'bold',
+    color: '#513438',
+    paddingTop: 5,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
-  orderScreenImage:{
-    width:'90%',
-    resizeMode:'stretch',
-    height:250,
-    borderTopLeftRadius:15,
-    borderTopRightRadius:15,
+  orderScreenImage: {
+    width: '90%',
+    resizeMode: 'stretch',
+    height: 250,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
-  orderImageContainer:{
-    alignItems:'center',
-    width:'auto',
-    marginTop:10,
-    marginBottom:20,
-    elevation:4,
-    shadowColor:'black'
+  orderImageContainer: {
+    alignItems: 'center',
+    width: 'auto',
+    marginTop: 10,
+    marginBottom: 20,
+    elevation: 4,
+    shadowColor: 'black'
   },
- 
   stepCount: {
     fontWeight: 'bold',
     fontSize: 12,
+    marginBottom: 5,
+  },
+  stepIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
   },
   designHeader: {
     marginTop: 10,
@@ -300,9 +314,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     marginStart: 5,
-    marginTop:10
+    marginTop: 10
   },
-  
   typeContainer: {
     marginRight: 15,
     alignItems: 'center',
@@ -323,7 +336,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: '#FFFFFF',
-    
   },
   title: {
     fontSize: 15,
@@ -361,7 +373,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     marginTop: 10,
-    margin:3
+    margin: 3,
+    marginBottom: 10,
   },
   stepBox: {
     width: '48%',
@@ -369,15 +382,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff4f2',
     borderRadius: 10,
     marginBottom: 7,
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  stepTextContainer: {
+    flex: 1, // Allows the text container to fill the remaining space
   },
   stepText: {
     fontSize: 12,
     color: '#383035',
     textAlign: 'left',
+    flexWrap: 'wrap', // Ensures text wraps within the container
   },
   carouselWrapper: {
-    
     marginBottom: 10,
   },
 });

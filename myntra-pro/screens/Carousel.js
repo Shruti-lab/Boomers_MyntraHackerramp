@@ -43,7 +43,9 @@ const Carousel = ({ images, scrollInterval = 3000 }) => {
         scrollEventThrottle={16}
       >
         {images.map((image, index) => (
-          <Image key={index} source={image} style={styles.image} />
+          <View key={index} style={styles.imageWrapper}>
+            <Image source={image} style={styles.image} />
+          </View>
         ))}
       </ScrollView>
       <View style={styles.dotContainer}>
@@ -63,12 +65,25 @@ const Carousel = ({ images, scrollInterval = 3000 }) => {
 const styles = StyleSheet.create({
   carouselContainer: {
     height: 250,
-    padding:10 ,
-    marginBottom:20,
-    marginStart:9// Adjust this height as needed
+    margin: 15,
+    borderRadius: 8,
+    overflow: 'hidden',
+    borderColor: '#926f34',
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  imageWrapper: {
+    width,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    width,
+    width :'100%', // match the screen width exactly
     height: '100%',
     resizeMode: 'stretch',
   },
@@ -79,7 +94,7 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom:8
+    marginBottom: 8,
   },
   dot: {
     height: 10,

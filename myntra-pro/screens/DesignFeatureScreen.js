@@ -132,9 +132,7 @@ function DesignFeatureScreen({ navigation }) {
         </View>
       </View>
       <ScrollView>
-        <View style={styles.carouselWrapper}>
-          <Carousel images={adds.map(add => add.image)} scrollInterval={3000} />
-        </View>
+        
         <View style={styles.typeView}>
           <FlatList
             data={types}
@@ -144,18 +142,9 @@ function DesignFeatureScreen({ navigation }) {
             contentContainerStyle={styles.typeViewContainer}
           />
         </View>
-        <View style={styles.subheading}>
-          <Text style={styles.subheadingText}>Choose Your Fashion</Text>
-          <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
+        <View style={styles.carouselWrapper}>
+          <Carousel images={adds.map(add => add.image)} scrollInterval={3000} />
         </View>
-        <FlatList
-          data={products}
-          renderItem={renderItem2}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.flatListContainer}
-        />
         <View style={styles.instructions}>
           <Text style={styles.stepsTitle}>Get Your Dream Outfit in 4 Easy steps</Text>
         </View>
@@ -177,12 +166,70 @@ function DesignFeatureScreen({ navigation }) {
             <Text style={styles.stepText}>Your customized garment will be delivered to your destination</Text>
           </View>
         </View>
+        <View style={styles.orderImageContainer}>
+          <Image style={styles.orderScreenImage} source={require('../assets/designer9.jpg')}/>
+          <View style={styles.orderTextContainer}>
+          <Text style={styles.ordertext}>Get your Choice Custom-tailored </Text>
+          </View>
+        </View>
+        <View style={styles.subheading}>
+          <Text style={styles.subheadingText}>Choose Your Fashion</Text>
+          <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
+        </View>
+        <FlatList
+          data={products}
+          renderItem={renderItem2}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+        />
+        
+       
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  orderTextContainer:{
+    width:'90%',
+    
+  },
+  ordertext:{
+    fontSize:18,
+    marginBottom:5,
+    fontWeight:'bold',
+    color:'#513438',
+    borderBottomWidth:1,
+    borderLeftWidth:1,
+    borderRightWidth:1,
+    width:'100%',
+    textAlign:'center',
+    borderBottomLeftRadius:15,
+    borderBottomRightRadius:15,
+   
+  },
+  orderScreenImage:{
+    width:'90%',
+    resizeMode:'stretch',
+    height:250,
+    borderTopLeftRadius:15,
+    borderTopRightRadius:15,
+
+  },
+  orderImageContainer:{
+    alignItems:'center',
+    width:'auto',
+    marginTop:10,
+    marginBottom:20,
+    
+  },
+  carouselWrapper:{
+    
+    borderColor:'red',
+    width:'100%'
+  },
   stepCount: {
     fontWeight: 'bold',
     fontSize: 12,

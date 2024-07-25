@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, Alert, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, Alert, FlatList, Linking, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const products = [
@@ -56,11 +56,13 @@ const products = [
 ];
 
 const options = [
-  { id: '1', text: 'Take Advice from a Fashion Designer' },
-  { id: '2', text: 'Call Designer' },
+  { id: '1', text: 'Take Advice from a Fashion Designer', icon: 'person' },
+  { id: '2', text: 'Call Designer', icon: 'call' },
 ];
 
 function CustomerChoiceScreen({ navigation }) {
+  const [showContactSection, setShowContactSection] = useState(true);
+
   const handleOptionPress = (option) => {
     Alert.alert('Option Selected', `You selected ${option}`);
   };
@@ -69,8 +71,14 @@ function CustomerChoiceScreen({ navigation }) {
     Alert.alert('Product Clicked', `You clicked on ${item.name}`);
   };
 
+  const handleCallPress = () => {
+    const phoneNumber = 'tel:+1234567890'; // Replace with the actual phone number
+    Linking.openURL(phoneNumber);
+  };
+
   const renderOptionItem = ({ item }) => (
     <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionPress(item.text)}>
+      <Icon name={item.icon} size={24} color="#FFFFFF" style={styles.optionIcon} />
       <Text style={styles.optionButtonText}>{item.text}</Text>
     </TouchableOpacity>
   );
@@ -102,19 +110,77 @@ function CustomerChoiceScreen({ navigation }) {
         </TouchableOpacity>
         <Text style={styles.title}>Customer Choice</Text>
       </View>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.contentContainer}
-      />
+
+      <ScrollView>
+        <View style={styles.subheading}>
+          <Text style={styles.subheadingText}>Choose Your Fashion</Text>
+          <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
+        </View>
+        <FlatList
+          data={products}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.contentContainer}
+        />
+      </ScrollView>
+
+      {showContactSection && (
+        <View style={styles.contactSection}>
+         
+          <View style={styles.contactInfo}>
+            <Icon name="chatbubble-ellipses" size={30} color="#fff" style={styles.contactIcon} />
+            <Text style={styles.contactMessage}>Need advice? {'\n'}Contact our designer for personalized consultation.</Text>
+            <TouchableOpacity onPress={() => setShowContactSection(false)} style={styles.closeButton}>
+              <Icon name="close" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.callButton} onPress={handleCallPress}>
+            <Icon name="call" size={24} color="#ff4468" style={styles.callIcon} />
+            <Text style={styles.callButtonText}>Call Designer</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {!showContactSection && (
+        <TouchableOpacity style={styles.floatingButton} onPress={() => setShowContactSection(true)}>
+          <Icon name="call" size={30} color="#fff" />
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  contactTextContainer: {
+    padding: 10,
+    margin: 10,
+    borderRadius: 10, // Card-like effect
+    backgroundColor: '#FFFFFF',
+    elevation: 3, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  ContactText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  tagline: {
+    color: '#383035',
+  },
+  subheadingText: {
+    fontSize: 18,
+    color: '#513438',
+    fontWeight: 'bold',
+  },
+  subheading: {
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -139,17 +205,23 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 10,
+    paddingBottom: 200, // Added padding to ensure all content is visible
   },
   row: {
     justifyContent: 'space-between',
   },
   optionButton: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     margin: 10,
     paddingVertical: 15,
     backgroundColor: '#513438',
     borderRadius: 8,
-    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  optionIcon: {
+    marginRight: 10,
   },
   optionButtonText: {
     color: '#FFFFFF',
@@ -161,8 +233,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#fff',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
-    elevation:3,
+    elevation: 3,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
@@ -178,7 +251,87 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     color: '#636363',
+    textAlign: 'center',
   },
+  contactSection: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#ff4468',
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  contactHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  contactTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  closeButton: {
+    padding: 5,
+  },
+  contactInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  contactIcon: {
+    marginRight: 15,
+  },
+  contactMessage: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  callButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  callIcon: {
+    marginRight: 10,
+  },
+  callButtonText: {
+    color: '#ff4468',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    backgroundColor: '#ff4468',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+  },  
 });
 
 export default CustomerChoiceScreen;
+ 

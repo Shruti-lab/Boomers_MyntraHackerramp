@@ -141,11 +141,20 @@ function DesignFeatureScreen({ navigation }) {
       <View style={styles.header}>
         <View style={styles.designHeader}>
           <Text style={styles.title}>Design Page</Text>
+             
         </View>
         <View style={styles.iconContainer}>
+          <TouchableOpacity>
           <Icon name="notifications-outline" size={24} color="#000" />
-          <Icon name="heart-outline" size={24} color="#000" style={styles.icon} />
-          <Icon name="bag-outline" size={24} color="#000" style={styles.icon} />
+          </TouchableOpacity>
+          
+           <TouchableOpacity onPress={() => navigation.navigate('Quotes')}>
+          <Icon name="cube-outline" size={24} color="#000"  style={styles.icon}/>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={() =>Alert.alert('Your Order')}>
+          <Icon name="bag-outline" size={24} color="#000"  style={styles.icon}/>
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView>
@@ -272,6 +281,7 @@ const styles = StyleSheet.create({
   },
   designHeader: {
     marginTop: 10,
+    flexDirection:'row'
   },
   header: {
     flexDirection: 'row',

@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Icon from 'react-native-vector-icons/Ionicons'; 
 
 const OrderDetailsScreen = ({ order, onBackToOrders }) => {
   const [images, setImages] = useState([]);
+  const [designerQuotes, setDesignerQuotes] = useState([]);
+
+  useEffect(() => {
+    if (order.quotes) {
+      const quotesArray = Object.keys(order.quotes).map((designerEmail) => ({
+        designerEmail,
+        quote: order.quotes[designerEmail],
+      }));
+      setDesignerQuotes(quotesArray);
+    }
+  }, [order]);
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -20,9 +32,6 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
       quality: 1,
     });
 
-    // Log the result for debugging
-    console.log(result);
-
     if (result.canceled) {
       Alert.alert('Image picker canceled');
       return;
@@ -34,64 +43,60 @@ const OrderDetailsScreen = ({ order, onBackToOrders }) => {
     }
 
     const uri = result.assets[0].uri;
-
     setImages((prevImages) => [...prevImages, uri]);
   };
+
+  const renderQuote = (quote) => (
+    <View key={quote.designerEmail} style={styles.quoteContainer}>
+      <Text style={styles.quoteText}>{quote.quote}</Text>
+      <Text style={styles.designerEmailText}>{quote.designerEmail}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Order Details</Text>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.detailsContainer}>
+          <Text style={styles.sectionTitle}>Product Details</Text>
           <View style={styles.orderDetails}>
             <Text style={styles.detailLabel}>Product:</Text>
             <Text style={styles.detailValue}>{order.productName}</Text>
           </View>
-          <View style={styles.orderDetails}>
-            <Text style={styles.detailLabel}>Status:</Text>
-            <Text style={styles.detailValue}>{order.status}</Text>
-          </View>
+          
+          {order.imageUri && (
+            <Image source={{ uri: order.imageUri }} style={styles.orderImage} />
+          )}
         </View>
 
         {/* Display quotes */}
-        <Text style={styles.sectionTitle}>Quotes Sent:</Text>
-        <FlatList
-          data={order.designerQuotes}
-          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.quoteContainer}>
-              <Text style={styles.quoteText}>{item.quote}</Text>
-            </View>
-          )}
-          ListEmptyComponent={() => <Text style={styles.noQuotesText}>No quotes sent yet.</Text>}
-        />
+        <View style={styles.designerFees}>
+          <Text style={styles.sectionTitle}>Designer Fees</Text>
+          <Icon name="pricetag-outline" size={24} color="#000" style={styles.icon}/>
+        </View>
+        {designerQuotes.length > 0 ? (
+          designerQuotes.map((quote) => renderQuote(quote))
+        ) : (
+          <Text style={styles.noQuotesText}>No quotes sent yet.</Text>
+        )}
 
-        {/* Image upload section */}
-        <Text style={styles.sectionTitle}>Images:</Text>
-        <FlatList
-          data={images}
-          horizontal
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.imageContainer}> 
-              <Image source={{ uri: item }} style={styles.image} />
-            </View>
-          )}
-          ListEmptyComponent={() => <Text style={styles.noImagesText}>No images uploaded yet.</Text>}
-        />
-        <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-          <Text style={styles.uploadButtonText}>Upload Image</Text>
-        </TouchableOpacity>
+        {/* Display uploaded images */}
+        
       </ScrollView>
+    
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  imageContainer:{
-    alignItems:'center',
-    width:'100%',
-    justifyContent:'center'
+  icon: {
+    marginLeft: 15,
+    marginBottom:7
+  },
+  designerFees:{
+    flexDirection:'row',
+    alignItems:'center'
   },
   container: {
     flex: 1,
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     backgroundColor: '#fff',
-    padding: 15,
+    padding: 20,
     borderRadius: 10,
     marginBottom: 20,
     shadowColor: '#000',
@@ -137,23 +142,27 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: '#343a40',
-    marginTop: 20,
     marginBottom: 10,
   },
   quoteContainer: {
-    backgroundColor: '#fff',
-    padding: 10,
+    backgroundColor: '#e9ecef',
+    padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 3,
-    elevation: 5,
+    shadowRadius: 2,
+    elevation: 3,
   },
   quoteText: {
     fontSize: 16,
     color: '#6c757d',
+  },
+  designerEmailText: {
+    fontSize: 14,
+    color: '#adb5bd',
+    marginTop: 5,
   },
   noQuotesText: {
     fontSize: 16,
@@ -161,12 +170,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 10,
   },
+  imageList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
   image: {
     width: 100,
     height: 100,
     resizeMode: 'cover',
     borderRadius: 10,
-    marginRight: 10,
+    margin: 5,
   },
   noImagesText: {
     fontSize: 16,
@@ -176,7 +191,7 @@ const styles = StyleSheet.create({
   },
   uploadButton: {
     backgroundColor: '#17a2b8',
-    padding: 12,
+    paddingVertical: 12,
     borderRadius: 5,
     alignItems: 'center',
     marginVertical: 10,
@@ -188,7 +203,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: '#ff4468',
-    padding: 12,
+    paddingVertical: 12,
     borderRadius: 5,
     marginTop: 20,
     alignItems: 'center',
@@ -197,6 +212,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  orderImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    borderRadius: 10,
+    marginTop: 10,
   },
 });
 

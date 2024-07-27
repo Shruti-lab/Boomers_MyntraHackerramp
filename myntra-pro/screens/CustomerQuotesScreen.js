@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Image } from 'react-native';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import app from '../firebaseConfig'; // Adjust path as per your structure
 import OrderDetailsScreen from './OrderDetailsScreen'; // Import OrderDetailsScreen
 import { Ionicons } from '@expo/vector-icons'; // Importing icons
@@ -8,24 +9,43 @@ import { Ionicons } from '@expo/vector-icons'; // Importing icons
 function CustomerQuotesScreen({ navigation }) {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const customer_id = 'customer_id'; // Replace with actual customer ID or get it dynamically
+  const [customerEmail, setCustomerEmail] = useState('');
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const db = getFirestore(app);
-        const ordersRef = collection(db, 'orders');
-        const q = query(ordersRef, where('customerId', '==', customer_id));
-        const ordersSnapshot = await getDocs(q);
-        const ordersList = ordersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        setOrders(ordersList);
-      } catch (error) {
-        console.error('Error fetching orders: ', error);
-      }
-    };
-
-    fetchOrders();
+    const user = auth.currentUser;
+    if (user) {
+      setCustomerEmail(user.email);
+    }
   }, []);
+
+  useEffect(() => {
+    if (customerEmail) {
+      const ordersRef = collection(db, 'orders');
+      const q = query(ordersRef, where('customerId', '==', customerEmail));
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const ordersList = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          console.log('Order data:', data); // Log order data for debugging
+
+          return {
+            ...data,
+            id: doc.id,
+            imageUri: data.imageUri || '', // Ensure imageUri is handled
+            productName: data.productName || 'Unknown Product',
+          };
+        });
+
+        setOrders(ordersList);
+      }, (error) => {
+        console.error('Error fetching orders: ', error);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [customerEmail]);
 
   const handleSelectOrder = (order) => {
     setSelectedOrder(order);
@@ -59,10 +79,13 @@ function CustomerQuotesScreen({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.orderCard} onPress={() => handleSelectOrder(item)}>
               <View style={styles.orderCardContent}>
-                <Ionicons name="pricetag" size={24} color="#ff4468" />
+                {item.imageUri ? (
+                  <Image source={{ uri: item.imageUri }} style={styles.productImage} />
+                ) : (
+                  <Image source={require('../assets/casual.png')} style={styles.productImage} /> // Fallback image
+                )}
                 <View style={styles.orderCardText}>
                   <Text style={styles.orderId}>Product: {item.productName}</Text>
-                  <Text style={styles.orderStatus}>Status: {item.status}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -109,12 +132,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     backgroundColor: 'white',
-  }, 
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
-    paddingTop: 40, // Increased top padding for margin
+    paddingTop: 40,
   },
   orderDetailsContainer: {
     flex: 1,
@@ -125,11 +148,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20,
     alignItems: 'center',
+    marginBottom:20
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
+    marginBottom:0  ,
   },
   orderCard: {
     backgroundColor: '#f2f2f2',
@@ -159,6 +184,12 @@ const styles = StyleSheet.create({
   orderStatus: {
     fontSize: 16,
     color: '#666666',
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    resizeMode: 'cover',
   },
 });
 

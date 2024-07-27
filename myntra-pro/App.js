@@ -24,6 +24,7 @@ import { UserProvider } from './components/UserContext';
 import DesignFeatureScreen from './screens/DesignFeatureScreen';
 import JumpsuitForm from './screens/Jumpsuit';
 import CustomerChoiceScreen from './screens/CustomerChoiceScreen';
+import OtherTabsScreen from './screens/OtherTabsScreen';
 
 
 const Stack = createStackNavigator();
@@ -39,10 +40,9 @@ function CustomerBottomTabNavigator() {
 
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Orders') {
-            iconName = focused ? 'list' : 'list-outline';
-          } else if (route.name === 'Quotes') {
-            iconName = focused ? 'pricetag' : 'pricetag-outline';
+          
+          } else if (route.name === 'Other Tabs') {
+            iconName = focused ? 'flash' : 'flash-outline';
           } else if (route.name === 'New') {
             iconName = focused ? 'logo-designernews' : 'logo-designernews';
           }
@@ -76,8 +76,8 @@ function CustomerBottomTabNavigator() {
     >
       <Tab.Screen name="Home" component={CustomerHomeScreen} />
       <Tab.Screen name="New" component={DesignFeatureScreen} />
-      <Tab.Screen name="Orders" component={OrderScreen} />
-      <Tab.Screen name="Quotes" component={CustomerQuotesScreen} />
+      <Tab.Screen name="Other Tabs" component={OtherTabsScreen} />
+      
     </Tab.Navigator>
     </UserProvider>
   );
@@ -169,6 +169,7 @@ function App() {
         <Stack.Screen name="CustomerPage" component={CustomerBottomTabNavigator} />
         <Stack.Screen name="Jumpsuit" component={JumpsuitForm}/>
         <Stack.Screen name="CustomerChoice" component={CustomerChoiceScreen}/>
+        <Stack.Screen name="Quotes" component={CustomerQuotesScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>

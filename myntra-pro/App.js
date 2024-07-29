@@ -25,6 +25,7 @@ import DesignFeatureScreen from './screens/DesignFeatureScreen';
 import JumpsuitForm from './screens/Jumpsuit';
 import CustomerChoiceScreen from './screens/CustomerChoiceScreen';
 import OtherTabsScreen from './screens/OtherTabsScreen';
+import OrderDetailsScreen from './screens/OrderDetailsScreen';
 
 
 const Stack = createStackNavigator();
@@ -170,6 +171,8 @@ function App() {
         <Stack.Screen name="Jumpsuit" component={JumpsuitForm}/>
         <Stack.Screen name="CustomerChoice" component={CustomerChoiceScreen}/>
         <Stack.Screen name="Quotes" component={CustomerQuotesScreen} />
+        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

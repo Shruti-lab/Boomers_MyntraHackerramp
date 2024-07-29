@@ -152,7 +152,7 @@ function DesignFeatureScreen({ navigation }) {
           <Icon name="cube-outline" size={24} color="#000"  style={styles.icon}/>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={() =>Alert.alert('Your Order')}>
+          <TouchableOpacity onPress={() =>Alert.alert('Placed Order')}>
           <Icon name="bag-outline" size={24} color="#000"  style={styles.icon}/>
           </TouchableOpacity>
         </View>

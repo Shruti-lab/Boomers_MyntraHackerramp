@@ -1,224 +1,199 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import Icon from 'react-native-vector-icons/Ionicons'; 
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const OrderDetailsScreen = ({ order, onBackToOrders }) => {
-  const [images, setImages] = useState([]);
-  const [designerQuotes, setDesignerQuotes] = useState([]);
-
-  useEffect(() => {
-    if (order.quotes) {
-      const quotesArray = Object.keys(order.quotes).map((designerEmail) => ({
-        designerEmail,
-        quote: order.quotes[designerEmail],
-      }));
-      setDesignerQuotes(quotesArray);
-    }
-  }, [order]);
-
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (permissionResult.granted === false) {
-      Alert.alert('Permission to access camera roll is required!');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (result.canceled) {
-      Alert.alert('Image picker canceled');
-      return;
-    }
-
-    if (!result.assets || !result.assets[0] || !result.assets[0].uri) {
-      Alert.alert('Uri not found');
-      return;
-    }
-
-    const uri = result.assets[0].uri;
-    setImages((prevImages) => [...prevImages, uri]);
-  };
-
-  const renderQuote = (quote) => (
-    <View key={quote.designerEmail} style={styles.quoteContainer}>
-      <Text style={styles.quoteText}>{quote.quote}</Text>
-      <Text style={styles.designerEmailText}>{quote.designerEmail}</Text>
-    </View>
-  );
+const OrderDetailsScreen = ({ route, navigation }) => {
+  const { order } = route.params;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Order Details</Text>
-      
-      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Order Details</Text>
+        <View style={styles.placeholder} />
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.detailsContainer}>
-          <Text style={styles.sectionTitle}>Product Details</Text>
-          <View style={styles.orderDetails}>
-            <Text style={styles.detailLabel}>Product:</Text>
-            <Text style={styles.detailValue}>{order.productName}</Text>
+          <View style={styles.productName}>
+            <Text style={styles.nameValue}>{order.productName}</Text>
           </View>
           
           {order.imageUri && (
             <Image source={{ uri: order.imageUri }} style={styles.orderImage} />
           )}
+
+          <View style={styles.separator} />
+
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Material:</Text>
+            <Text style={styles.detailValue}>{order.material}</Text>
+          </View>
+
+          <View style={styles.separator} />
+
+          <View style={styles.measurementsSection}>
+            <Text style={styles.sectionTitle}>Measurements:</Text>
+            {Object.entries(order.measurements).map(([key, value]) => (
+              <View key={key} style={styles.detailRow}>
+                <Text style={styles.measurementLabel}>{key.charAt(0).toUpperCase() + key.slice(1)}:</Text>
+                <Text style={styles.detailValue}>{value}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={styles.separator} />
         </View>
 
-        {/* Display quotes */}
-        <View style={styles.designerFees}>
-          <Text style={styles.sectionTitle}>Designer Fees</Text>
-          <Icon name="pricetag-outline" size={24} color="#000" style={styles.icon}/>
+        <View style={styles.quotesContainer}>
+          <Text style={styles.sectionTitle}>Designer Fees:</Text>
+          {order.quotes && Object.keys(order.quotes).map(designerEmail => (
+            <View key={designerEmail} style={styles.quoteItem}>
+              <Text style={styles.quoteText}>{order.quotes[designerEmail]}</Text>
+              <Text style={styles.designerEmailText}>{designerEmail}</Text>
+            </View>
+          ))}
+          {(!order.quotes || Object.keys(order.quotes).length === 0) && (
+            <Text style={styles.noQuotesText}>No quotes sent yet.</Text>
+          )}
         </View>
-        {designerQuotes.length > 0 ? (
-          designerQuotes.map((quote) => renderQuote(quote))
-        ) : (
-          <Text style={styles.noQuotesText}>No quotes sent yet.</Text>
-        )}
-
-        {/* Display uploaded images */}
-        
       </ScrollView>
-    
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  icon: {
-    marginLeft: 15,
-    marginBottom:7
+  productName: {  
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  designerFees:{
-    flexDirection:'row',
-    alignItems:'center'
+  nameValue: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    borderWidth: 2,
+    borderRadius: 10,
+    width:'50%',
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderColor: '#ff4468',
+    backgroundColor: '#ff4468',
+    color: '#fff',
+    textAlign:'center',
+    alignSelf:'center'
   },
   container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-    padding: 20,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#343a40',
-    marginBottom: 20,
-    textAlign: 'center',
+    flex: 1, 
+    backgroundColor: '#f5f5f5',
+    paddingTop: 25,
   },
   scrollContainer: {
+    paddingHorizontal: 15,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
     paddingVertical: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  backButton: {
+    padding: 5,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  placeholder: {
+    width: 24,
   },
   detailsContainer: {
     backgroundColor: '#fff',
-    padding: 20,
     borderRadius: 10,
-    marginBottom: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    marginVertical: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 3,
-    elevation: 5,
-  },
-  orderDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  detailLabel: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#495057',
-  },
-  detailValue: {
-    fontSize: 16,
-    color: '#6c757d',
-  },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#343a40',
-    marginBottom: 10,
-  },
-  quoteContainer: {
-    backgroundColor: '#e9ecef',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  quoteText: {
-    fontSize: 16,
-    color: '#6c757d',
-  },
-  designerEmailText: {
-    fontSize: 14,
-    color: '#adb5bd',
-    marginTop: 5,
-  },
-  noQuotesText: {
-    fontSize: 16,
-    color: '#adb5bd',
-    textAlign: 'center',
-    marginVertical: 10,
-  },
-  imageList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
-    borderRadius: 10,
-    margin: 5,
-  },
-  noImagesText: {
-    fontSize: 16,
-    color: '#adb5bd',
-    textAlign: 'center',
-    marginVertical: 10,
-  },
-  uploadButton: {
-    backgroundColor: '#17a2b8',
-    paddingVertical: 12,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  uploadButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  backButton: {
-    backgroundColor: '#ff4468',
-    paddingVertical: 12,
-    borderRadius: 5,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   orderImage: {
     width: '100%',
     height: 200,
     resizeMode: 'cover',
     borderRadius: 10,
-    marginTop: 10,
+    marginVertical: 10,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginVertical: 10,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  detailLabel: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: 'bold',
+    flex: 1,
+  },
+  detailValue: {
+    fontSize: 16,
+    color: '#555',
+    flex: 2,
+    textAlign: 'right',
+  },
+  measurementsSection: {
+    marginVertical: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+  },
+  measurementLabel: {
+    fontSize: 16,
+    color: '#555',
+    fontStyle: 'italic',
+    flex: 1,
+  },
+  quotesContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 3,
+  },
+  quoteItem: {
+    marginBottom: 10,
+  },
+  quoteText: {
+    fontSize: 18,
+    color: '#6c757d',
+  },
+  designerEmailText: {
+    fontSize: 16,
+    color: '#888',
+    marginTop: 5,
+  },
+  noQuotesText: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+    marginVertical: 10,
   },
 });
 

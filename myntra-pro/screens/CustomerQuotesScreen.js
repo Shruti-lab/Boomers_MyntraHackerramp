@@ -3,12 +3,11 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Image
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import app from '../firebaseConfig'; // Adjust path as per your structure
-import OrderDetailsScreen from './OrderDetailsScreen'; // Import OrderDetailsScreen
-import { Ionicons } from '@expo/vector-icons'; // Importing icons
+import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons'; // Importing icons
 
 function CustomerQuotesScreen({ navigation }) {
   const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
   const [customerEmail, setCustomerEmail] = useState('');
   const db = getFirestore(app);
   const auth = getAuth(app);
@@ -17,6 +16,7 @@ function CustomerQuotesScreen({ navigation }) {
     const user = auth.currentUser;
     if (user) {
       setCustomerEmail(user.email);
+      console.log('Customer email:', user.email); // Log customer email
     }
   }, []);
 
@@ -35,9 +35,12 @@ function CustomerQuotesScreen({ navigation }) {
             id: doc.id,
             imageUri: data.imageUri || '', // Ensure imageUri is handled
             productName: data.productName || 'Unknown Product',
+            color: data.color || 'N/A', 
+            material: data.material || 'N/A',
           };
         });
 
+        console.log('Orders list:', ordersList); // Log the list of orders
         setOrders(ordersList);
       }, (error) => {
         console.error('Error fetching orders: ', error);
@@ -48,35 +51,45 @@ function CustomerQuotesScreen({ navigation }) {
   }, [customerEmail]);
 
   const handleSelectOrder = (order) => {
-    setSelectedOrder(order);
+    navigation.navigate('OrderDetails', { order });
   };
 
-  const handleBackToOrders = () => {
-    setSelectedOrder(null);
+  const handleRefresh = () => {
+    // Add refresh functionality here
+    console.log('Refresh icon pressed');
+  };
+
+  const handleSettings = () => {
+    // Add settings functionality here
+    console.log('Settings icon pressed');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.myntraInsider}>
-        <View style={styles.logoImage}>
-          <Image source={require('../assets/myntraIcon.png')} style={styles.logo} />
-        </View>
-        <View style={styles.myntraTextContainer}>
-          <Text style={styles.myntraText}>Order Details</Text>
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton2}>
+          <Icon name="arrow-back" size={24} color="#000"/>
+        </TouchableOpacity>
+        <View alignItems='center'>
+        <Text style={styles.title}>Your Orders</Text>
       </View>
-      {selectedOrder ? (
-        <View style={styles.orderDetailsContainer}>
-          <OrderDetailsScreen order={selectedOrder} onBackToOrders={handleBackToOrders} />
-          <TouchableOpacity style={styles.backButton} onPress={handleBackToOrders}>
-            <Text style={styles.buttonText}>Back to Orders</Text>
+        <View style={styles.headerIcons}>
+          
+          <TouchableOpacity onPress={handleSettings} style={styles.headerIcon}>
+            <Icon name="bag-outline" size={24} color="#000" />
           </TouchableOpacity>
         </View>
-      ) : (
-        <FlatList
-          data={orders}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+      </View>
+
+     
+      
+
+      <FlatList
+        data={orders}
+        style={styles.orderList}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          customerEmail === item.customerId && (
             <TouchableOpacity style={styles.orderCard} onPress={() => handleSelectOrder(item)}>
               <View style={styles.orderCardContent}>
                 {item.imageUri ? (
@@ -85,111 +98,128 @@ function CustomerQuotesScreen({ navigation }) {
                   <Image source={require('../assets/casual.png')} style={styles.productImage} /> // Fallback image
                 )}
                 <View style={styles.orderCardText}>
-                  <Text style={styles.orderId}>Product: {item.productName}</Text>
+                  <View style={styles.productDetails}>
+                    <Ionicons name="shirt-outline" size={20} color="#ff4468" />
+                    <Text style={styles.orderId}>{item.productName}</Text>
+                  </View>
+                  <Text style={styles.orderColor}>Color: {item.color}</Text>
+                  <Text style={styles.orderColor}>Material: {item.material}</Text>
                 </View>
               </View>
             </TouchableOpacity>
-          )}
-        />
-      )}
+          )
+        )}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  uploadImage: {
-    marginBottom: 30,
+  
+  orderList:{
+    marginTop:10,
+    borderTopWidth:2,
+    borderTopColor:'#d3d3d3'
   },
-  myntraTextContainer: {
-    alignItems: 'center',
-    width: '80%',
+  addImage:{
+    width:'95%',
+    height:150,
+    alignSelf:'center',
+    padding:20,
+    resizeMode:'stretch'
   },
-  logo: {
-    width: 35,
-    height: 30,
-    resizeMode: 'contain',
+  addText:{
+    color:'#fff',
+    alignSelf:'center'
   },
-  myntraImage: {
-    paddingTop: 10,
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
+  arrowIcon: {
+    alignSelf: 'center',
   },
-  myntraText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginStart: 4,
-    top: 0,
+  orderColor: {
+    color: '#636363',
+    marginLeft:30,
   },
-  myntraInsider: {
-    marginTop: 30,
-    flexDirection: 'row',
-    borderWidth: 2,
-    borderColor: '#7f7053',
-    borderRadius: 4,
-    marginBottom: 20,
-    height: 45,
-    alignItems: 'center',
+  addContainer: {
     width: '100%',
-    backgroundColor: 'white',
+    height: 50,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    borderRadius: 25,
+    marginBottom: 50,
+    alignContent:'center' ,
+    marginTop:40,
+   
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
+    textAlign:'center'
+ 
+  },
+  headerIcons: {
+    flexDirection: 'row',
+  },
+  headerIcon: {
+    marginLeft: 20,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#636363',
+   
+  },
+  backButton2: {
+    backgroundColor: '#fff',
+    paddingVertical: 12,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginRight: 10,
   },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
-    paddingTop: 40,
-  },
-  orderDetailsContainer: {
-    flex: 1,
-  },
-  backButton: {
-    backgroundColor: '#ff4468',
-    paddingVertical: 12,
-    borderRadius: 5,
-    marginTop: 20,
-    alignItems: 'center',
-    marginBottom:20
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom:0  ,
+    marginTop:28
   },
   orderCard: {
-    backgroundColor: '#f2f2f2',
-    padding: 20,
-    marginBottom: 15,
+    backgroundColor: '#fff',
+    marginBottom: 0,
     borderRadius: 10,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#e0e0e0',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 5,
   },
   orderCardContent: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop:10
   },
   orderCardText: {
-    marginLeft: 15,
+    flex: 1,
+    marginLeft: 45,
+  },
+  productDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   orderId: {
-    fontSize: 18,
+    fontSize: 17 ,
     fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  orderStatus: {
-    fontSize: 16,
-    color: '#666666',
+    marginLeft: 10
   },
   productImage: {
-    width: 80,
-    height: 80,
+    width: 100, 
+    height: 100,
     borderRadius: 10,
     resizeMode: 'cover',
+    marginBottom:12,
+    marginLeft:15
   },
 });
 

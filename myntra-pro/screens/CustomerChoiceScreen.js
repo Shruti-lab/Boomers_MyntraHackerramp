@@ -98,12 +98,12 @@ function CustomerChoiceScreen({ navigation }) {
   };
 
   const data = [
-    ...options.map(option => ({ ...option, type: 'option' })),
+   
     ...products.map(product => ({ ...product, type: 'product' })),
   ];
 
-  return (
-    <SafeAreaView style={styles.container}>
+  const renderHeader = () => (
+    <>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#000" />
@@ -111,24 +111,31 @@ function CustomerChoiceScreen({ navigation }) {
         <Text style={styles.title}>Customer Choice</Text>
       </View>
 
-      <ScrollView>
-        <View style={styles.subheading}>
-          <Text style={styles.subheadingText}>Choose Your Fashion</Text>
-          <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
-        </View>
-        <FlatList
-          data={products}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
-          contentContainerStyle={styles.contentContainer}
-        />
-      </ScrollView>
+      <View style={styles.subheading}>
+        <Text style={styles.subheadingText}>Choose Your Fashion</Text>
+        <Text style={styles.tagline}>Your choice, we'll tailor just for you</Text>
+      </View>
+
+      <View style={styles.addContainer}>
+        <Image style={styles.addImage} source={require('../assets/addDesigner.png')} />
+      </View>
+    </>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={styles.contentContainer}
+        ListHeaderComponent={renderHeader}
+      />
 
       {showContactSection && (
         <View style={styles.contactSection}>
-         
           <View style={styles.contactInfo}>
             <Icon name="chatbubble-ellipses" size={30} color="#fff" style={styles.contactIcon} />
             <Text style={styles.contactMessage}>Need advice? {'\n'}Contact our designer for personalized consultation.</Text>
@@ -153,13 +160,31 @@ function CustomerChoiceScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  addImage: {
+    width: '100%',
+    height: 190,
+    resizeMode: 'stretch',
+  },
+  addContainer: {
+    width: '93%',
+    height: 210,
+    backgroundColor: '#fff',
+    borderColor: '#d3d3d3',
+    marginBottom: 10,
+    alignContent: 'center',
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    alignSelf: 'center',
+    paddingTop: 10,
+  },
   contactTextContainer: {
     padding: 10,
     margin: 10,
-    borderRadius: 10, // Card-like effect
+    borderRadius: 10,
     backgroundColor: '#FFFFFF',
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
+    elevation: 3,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
@@ -205,7 +230,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 10,
-    paddingBottom: 200, // Added padding to ensure all content is visible
+    paddingBottom: 200,
   },
   row: {
     justifyContent: 'space-between',
@@ -330,7 +355,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,
-  },  
+  },
 });
 
 export default CustomerChoiceScreen;

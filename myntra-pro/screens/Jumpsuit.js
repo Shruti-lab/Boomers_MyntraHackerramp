@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Alert, ScrollView, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
-import app from '../firebaseConfig';
+import { app } from '../firebaseConfig';
+import { getAuth } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,7 +19,18 @@ function JumpsuitForm({ navigation }) {
   const [material, setMaterial] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [imageUri, setImageUri] = useState(null);
+  const [customerEmail, setCustomerEmail] = useState('');
+
   const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setCustomerEmail(user.email);
+      console.log('Customer email:', user.email); // Log customer email
+    }
+  }, []);
 
   const handlePlaceOrder = async () => {
     try {
@@ -28,7 +40,7 @@ function JumpsuitForm({ navigation }) {
       }
 
       await addDoc(collection(db, 'orders'), {
-        customerId: 'customer_id', // Replace with actual customer ID
+        customerId: customerEmail, // Replace with actual customer ID
         productName,
         measurements: {
           chest,
@@ -40,7 +52,6 @@ function JumpsuitForm({ navigation }) {
         },
         color,
         material,
-        status: 'pending',
         quotes: {},
         imageUri,
       });
@@ -103,25 +114,28 @@ function JumpsuitForm({ navigation }) {
         </TouchableOpacity>
         <Text style={styles.title}>Jumpsuit</Text>
       </View>
-      
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.headerContainer}>
+        <View style={styles.headerContainer}>
           <Image source={require('../assets/Jumpsuit.png')} style={styles.imageJumpsuit} />
           <View style={styles.textContainer}>
             <Text style={styles.subheadingText}>Jumpsuit</Text>
             <Text style={styles.tagline}>Get the perfect jumpsuit stitched just for you</Text>
           </View>
         </View>
+        <View style={styles.separator} />
+        <TouchableOpacity style={styles.imagePreviewContainer}>
+          <Image source={require('../assets/measurement3.png')} style={styles.videoContainer} />
+        </TouchableOpacity>
         <View style={styles.container}>
           <View style={styles.header}>
-           
             <Text style={styles.headerText}>Enter Details</Text>
           </View>
 
           {!orderPlaced && (
             <>
               {imageUri && (
-                <View style={styles.imagePreviewContainer}>
+                <View style={styles.videoContainer}>
                   <Image source={{ uri: imageUri }} style={styles.imagePreview} />
                 </View>
               )}
@@ -210,7 +224,7 @@ function JumpsuitForm({ navigation }) {
           {orderPlaced && (
             <View style={styles.confirmationContainer}>
               <Text style={styles.confirmationText}>Order Sent!</Text>
-              <Button title="Place New Order" onPress={handleNewOrder} color="#ff4468" />
+              <Button title="Place New Order" onPress={handleNewOrder} color="#ff4468" style={styles.placeOrder} />
             </View>
           )}
         </View>
@@ -220,6 +234,24 @@ function JumpsuitForm({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  separator: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginTop:20
+  },
+  videoContainer: {
+    resizeMode: 'contain',
+    paddingLeft: 10,
+    paddingRight: 10,
+    width: '95%',
+    marginBottom: 0, // Reduced bottom margin
+  },
+  buttonContainer: {
+    borderRadius: 15,
+  },
+  placeOrder: {
+    borderRadius: 15,
+  },
   headerPage: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -250,11 +282,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 0,
-    backgroundColor:'#fff',
-    padding:20,
-    borderRadius:15,
-    
-    
+    backgroundColor: '#fff',
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 15,
   },
   imageJumpsuit: {
     width: 150,
@@ -264,8 +296,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    marginTop:10,
-    margin:5
+    marginTop: 10,
+    margin: 5,
   },
   subheadingText: {
     fontSize: 18,
@@ -277,7 +309,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
@@ -286,9 +317,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    marginTop:0
   },
   header: {
-    
     alignItems: 'center',
     marginBottom: 20,
     borderBottomWidth: 1,
@@ -308,7 +339,7 @@ const styles = StyleSheet.create({
   },
   imagePreviewContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 0, // Reduced bottom margin
   },
   imagePreview: {
     width: '100%',
@@ -324,10 +355,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     marginBottom: 20,
-    marginLeft:50,
-    marginRight:50,
-    borderWidth:2,
-    borderColor:'#ff4468'
+    marginLeft: 50,
+    marginRight: 50,
+    borderWidth: 2,
+    borderColor: '#ff4468',
   },
   uploadButtonText: {
     color: '#535353',
@@ -341,9 +372,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     backgroundColor: '#fff',
-  },
-  buttonContainer: {
-    marginTop: 20,
   },
   confirmationContainer: {
     flex: 1,

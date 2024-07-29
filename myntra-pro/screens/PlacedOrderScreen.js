@@ -41,7 +41,7 @@ function PlacedOrderScreen({ navigation }) {
         });
 
         // Filter orders with non-null finalQuote
-        const filteredOrders = ordersList.filter(order => order.finalQuote !== null);
+        const filteredOrders = ordersList.filter(order => order.finalQuote != null);
 
         console.log('Filtered Orders list:', filteredOrders); // Log the filtered list of orders
         setOrders(filteredOrders);

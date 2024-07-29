@@ -53,6 +53,7 @@ function JumpsuitForm({ navigation }) {
         color,
         material,
         quotes: {},
+        finalQuote:{},
         imageUri,
       });
 
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     width: '95%',
-    marginBottom: 0, // Reduced bottom margin
+    marginBottom: 20, // Reduced bottom margin
   },
   buttonContainer: {
     borderRadius: 15,

@@ -149,10 +149,10 @@ function DesignFeatureScreen({ navigation }) {
           </TouchableOpacity>
           
            <TouchableOpacity onPress={() => navigation.navigate('Quotes')}>
-          <Icon name="cube-outline" size={24} color="#000"  style={styles.icon}/>
+          <Icon name="cart-outline" size={24} color="#000"  style={styles.icon}/>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={() =>Alert.alert('Placed Order')}>
+          <TouchableOpacity onPress={() =>navigation.navigate('PlacedOrder')}>
           <Icon name="bag-outline" size={24} color="#000"  style={styles.icon}/>
           </TouchableOpacity>
         </View>

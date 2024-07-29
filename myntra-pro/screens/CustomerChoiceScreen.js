@@ -17,7 +17,7 @@ const products = [
     id: '3',
     name: 'Shirt',
     image: require('../assets/shirt1.png'),
-  },
+  },  
   {
     id: '4',
     name: 'Kurti',

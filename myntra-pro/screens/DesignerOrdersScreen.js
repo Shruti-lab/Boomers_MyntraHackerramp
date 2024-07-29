@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Image, SafeAreaView } from 'react-native';
 import { getFirestore, collection, query, onSnapshot, doc, updateDoc, where } from 'firebase/firestore';
-import { firestore } from '../firebaseConfig'; // Ensure firestore is correctly imported
+import { getAuth } from 'firebase/auth';
+import { firestore, app } from '../firebaseConfig'; // Ensure both firestore and app are imported correctly
 import { FontAwesome5 } from '@expo/vector-icons'; // Importing icons
 
 function DesignerOrdersScreen() {
   const [orders, setOrders] = useState([]);
   const [quoteMap, setQuoteMap] = useState({});
+  const [designerEmail, setDesignerEmail] = useState('');
   const db = firestore;
+  const auth = getAuth(app);
 
   useEffect(() => {
-    const q = query(collection(db, 'orders'), where('status', '==', 'pending'));
+    // Retrieve designer's email
+    const user = auth.currentUser;
+    if (user) {
+      setDesignerEmail(user.email);
+    }
+
+    const q = query(collection(db, 'orders'),);
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const ordersList = [];
       querySnapshot.forEach((doc) => {
@@ -22,15 +31,23 @@ function DesignerOrdersScreen() {
   }, []);
 
   const handleSendQuote = async (orderId) => {
+    if (!designerEmail) {
+      Alert.alert('Error', 'Could not retrieve designer email.');
+      return;
+    }
+
     try {
       const orderDoc = doc(db, 'orders', orderId);
       const currentQuote = quoteMap[orderId] || ''; // Get current quote from state map
+
+      // Update the quotes map with the designer's email as the key and the current quote as the value
       await updateDoc(orderDoc, {
-        designerQuotes: {
-          quote: currentQuote, // Save the actual quote amount
+        quotes: {
+          [designerEmail]: currentQuote // Set the designer's email as the key and the quote as the value
         },
-        status: 'quote_sent', // Update status to 'quote_sent'
+      // Update status to 'quote_sent'
       });
+
       Alert.alert('Quote Sent', 'Your quote has been sent successfully.');
 
       // Remove the order from the local state

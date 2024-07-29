@@ -6,7 +6,7 @@ import app from '../firebaseConfig'; // Adjust path as per your structure
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/Ionicons'; // Importing icons
 
-function CustomerQuotesScreen({ navigation }) {
+function PlacedOrderScreen({ navigation }) {
   const [orders, setOrders] = useState([]);
   const [customerEmail, setCustomerEmail] = useState('');
   const db = getFirestore(app);
@@ -40,8 +40,11 @@ function CustomerQuotesScreen({ navigation }) {
           };
         });
 
-        console.log('Orders list:', ordersList); // Log the list of orders
-        setOrders(ordersList);
+        // Filter orders with non-null finalQuote
+        const filteredOrders = ordersList.filter(order => order.finalQuote !== null);
+
+        console.log('Filtered Orders list:', filteredOrders); // Log the filtered list of orders
+        setOrders(filteredOrders);
       }, (error) => {
         console.error('Error fetching orders: ', error);
       });
@@ -71,12 +74,12 @@ function CustomerQuotesScreen({ navigation }) {
           <Icon name="arrow-back" size={24} color="#000"/>
         </TouchableOpacity>
         <View alignItems='center'>
-        <Text style={styles.title}>Your Orders</Text>
+        <Text style={styles.title}>Placed Orders</Text>
       </View>
         <View style={styles.headerIcons}>
           
-          <TouchableOpacity  style={styles.headerIcon} onPress={() =>navigation.navigate('PlacedOrder')} >
-            <Icon name="bag-outline" size={24} color="#000" />
+          <TouchableOpacity onPress={() =>navigation.navigate('Quotes')} style={styles.headerIcon}>
+            <Icon name="cart-outline" size={24} color="#000" />
           </TouchableOpacity>
         </View>
       </View>
@@ -223,4 +226,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomerQuotesScreen;
+export default PlacedOrderScreen;

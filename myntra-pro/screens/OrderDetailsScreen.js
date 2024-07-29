@@ -1,9 +1,42 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { getFirestore, doc, updateDoc } from 'firebase/firestore';
+import { app } from '../firebaseConfig'; // Ensure firebaseConfig is correctly imported
+
+const db = getFirestore(app);
 
 const OrderDetailsScreen = ({ route, navigation }) => {
   const { order } = route.params;
+  
+
+  // Check if the order object contains the identifier
+  const orderId = order.id; // Update this line to reflect the actual unique identifier
+
+  // Generate a serial number for each quote
+  const generateSerialNumber = (index) => `Designer ${index + 1}:`;
+
+  const handleQuoteSubmit = async (designerEmail, saveQuote) => {
+    try {
+      if (!orderId) {
+        console.error('Order ID is undefined');
+        return;
+      }
+
+      const orderDoc = doc(db, 'orders', orderId);
+      const updatedFinalQuote = order.finalQuote ? { ...order.finalQuote } : {};
+      updatedFinalQuote[designerEmail] = saveQuote;
+
+      await updateDoc(orderDoc, {
+        finalQuote: updatedFinalQuote
+      });
+
+      Alert.alert('Quote Saved');
+      navigation.goBack()
+        } catch (error) {
+      console.error('Error updating document: ', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -47,11 +80,11 @@ const OrderDetailsScreen = ({ route, navigation }) => {
 
         <View style={styles.quotesContainer}>
           <Text style={styles.sectionTitle}>Designer Fees:</Text>
-          {order.quotes && Object.keys(order.quotes).map(designerEmail => (
-            <View key={designerEmail} style={styles.quoteItem}>
+          {order.quotes && Object.keys(order.quotes).map((designerEmail, index) => (
+            <TouchableOpacity key={index} style={styles.quoteItem} onPress={() => handleQuoteSubmit(designerEmail, order.quotes[designerEmail])}>
+              <Text style={styles.serialNumber}>{generateSerialNumber(index)}</Text>
               <Text style={styles.quoteText}>{order.quotes[designerEmail]}</Text>
-              <Text style={styles.designerEmailText}>{designerEmail}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
           {(!order.quotes || Object.keys(order.quotes).length === 0) && (
             <Text style={styles.noQuotesText}>No quotes sent yet.</Text>
@@ -72,14 +105,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderWidth: 2,
     borderRadius: 10,
-    width:'50%',
-    paddingTop: 5,
-    paddingBottom: 5,
+    width: '50%',
+    paddingVertical: 5,
     borderColor: '#ff4468',
     backgroundColor: '#ff4468',
     color: '#fff',
-    textAlign:'center',
-    alignSelf:'center'
+    textAlign: 'center',
+    alignSelf: 'center'
   },
   container: {
     flex: 1, 
@@ -178,16 +210,24 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   quoteItem: {
-    marginBottom: 10,
+    marginBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    padding: 10,
+    borderRadius: 15,
+    borderColor: '#d3d3d3',
+    justifyContent: 'space-between',
+  },
+  serialNumber: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: 'bold',
   },
   quoteText: {
     fontSize: 18,
     color: '#6c757d',
-  },
-  designerEmailText: {
-    fontSize: 16,
-    color: '#888',
-    marginTop: 5,
+    marginLeft: 20,
   },
   noQuotesText: {
     fontSize: 16,

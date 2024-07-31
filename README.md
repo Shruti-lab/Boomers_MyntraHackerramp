@@ -1,6 +1,6 @@
 # Boomers Presentation
 
-
+[NationalInstituteOfTechnologyGoa_Boomers.pptx](https://github.com/user-attachments/files/16434908/NationalInstituteOfTechnologyGoa_Boomers.pptx)
 
 # Boomers_MyntraHackerramp Videos explaining our project workflow and also the DEMO
 

@@ -15,8 +15,12 @@ function JumpsuitForm({ navigation }) {
   const [sleeveLength, setSleeveLength] = useState('');
   const [neck, setNeck] = useState('');
   const [inseam, setInseam] = useState('');
+  const [shoulderWidth, setShoulderWidth] = useState(''); // New field
+  const [armhole, setArmhole] = useState(''); // New field
+  const [crotchDepth, setCrotchDepth] = useState(''); // New field
   const [color, setColor] = useState('');
   const [material, setMaterial] = useState('');
+  const [extraSpecifications, setExtraSpecifications] = useState(''); // New optional field
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const [customerEmail, setCustomerEmail] = useState('');
@@ -49,11 +53,14 @@ function JumpsuitForm({ navigation }) {
           sleeveLength,
           neck,
           inseam,
+          shoulderWidth, // Include new measurements
+          armhole,
+          crotchDepth,
         },
         color,
         material,
+        extraSpecifications, // Include extra specifications
         quotes: {},
-        finalQuote:{},
         imageUri,
       });
 
@@ -72,8 +79,12 @@ function JumpsuitForm({ navigation }) {
     setSleeveLength('');
     setNeck('');
     setInseam('');
+    setShoulderWidth(''); // Reset new fields
+    setArmhole('');
+    setCrotchDepth('');
     setColor('');
     setMaterial('');
+    setExtraSpecifications(''); // Reset extra specifications
     setImageUri(null);
     setOrderPlaced(false);
   };
@@ -152,6 +163,10 @@ function JumpsuitForm({ navigation }) {
                   { label: 'Red', value: 'red' },
                   { label: 'Blue', value: 'blue' },
                   { label: 'Green', value: 'green' },
+                  { label: 'Yellow', value: 'yellow' }, // Added colors
+                  { label: 'Purple', value: 'purple' },
+                  { label: 'Black', value: 'black' },
+                  { label: 'White', value: 'white' },
                 ]}
                 style={pickerSelectStyles}
               />
@@ -164,6 +179,9 @@ function JumpsuitForm({ navigation }) {
                   { label: 'Cotton', value: 'cotton' },
                   { label: 'Wool', value: 'wool' },
                   { label: 'Polyester', value: 'polyester' },
+                  { label: 'Silk', value: 'silk' }, // Added materials
+                  { label: 'Linen', value: 'linen' },
+                  { label: 'Velvet', value: 'velvet' },
                 ]}
                 style={pickerSelectStyles}
               />
@@ -216,6 +234,34 @@ function JumpsuitForm({ navigation }) {
                 onChangeText={setInseam}
                 keyboardType="numeric"
               />
+              <TextInput
+                placeholder="Shoulder Width (inches)" // New field
+                style={styles.input}
+                value={shoulderWidth}
+                onChangeText={setShoulderWidth}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Armhole Measurement (inches)" // New field
+                style={styles.input}
+                value={armhole}
+                onChangeText={setArmhole}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Crotch Depth (inches)" // New field
+                style={styles.input}
+                value={crotchDepth}
+                onChangeText={setCrotchDepth}
+                keyboardType="numeric"
+              />
+              <TextInput
+                placeholder="Extra Specifications (optional)" // New optional field
+                style={[styles.input, { height: 80, textAlignVertical: 'top' }]}
+                value={extraSpecifications}
+                onChangeText={setExtraSpecifications}
+                multiline
+              />
               <View style={styles.buttonContainer}>
                 <Button title="Place Order" onPress={handlePlaceOrder} color="#ff4468" />
               </View>
@@ -244,7 +290,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     paddingLeft: 10,
     paddingRight: 10,
-    width: '95%',
+    marginTop:15,
+    height:220,
     marginBottom: 20, // Reduced bottom margin
   },
   buttonContainer: {

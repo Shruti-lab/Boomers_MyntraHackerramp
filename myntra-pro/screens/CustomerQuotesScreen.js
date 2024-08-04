@@ -39,9 +39,12 @@ function CustomerQuotesScreen({ navigation }) {
             material: data.material || 'N/A',
           };
         });
+        const filteredOrders = ordersList.filter(order => order.finalQuote == null);
 
-        console.log('Orders list:', ordersList); // Log the list of orders
-        setOrders(ordersList);
+        console.log('Filtered Orders list:', filteredOrders); // Log the filtered list of orders
+        setOrders(filteredOrders);
+
+        
       }, (error) => {
         console.error('Error fetching orders: ', error);
       });

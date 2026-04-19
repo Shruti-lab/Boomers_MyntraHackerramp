@@ -4939,10 +4939,10 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash-es@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz"
-  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+lodash-es@^4.18.0:
+  version "4.18.1"
+  resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.18.1.tgz"
+  integrity sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
@@ -4954,10 +4954,10 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+lodash@^4.18.0:
+  version "4.18.1"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz"
+  integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -5867,15 +5867,10 @@ picocolors@^1.0.0, picocolors@^1.0.1:
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.0.1.tgz"
   integrity sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==
 
-picomatch@^2.0.4, picomatch@^2.2.3, picomatch@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
-  integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
-
-picomatch@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/picomatch/-/picomatch-3.0.1.tgz"
-  integrity sha512-I3EurrIQMlRc9IaAZnqRR044Phh2DXY+55o7uJ0V+hYZAcQYSuFWsc9q5PvyDHUSCe1Qxn/iBz+78s86zWnGag==
+picomatch@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.npmjs.org/picomatch/-/picomatch-4.0.4.tgz"
+  integrity sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==
 
 pify@^4.0.1:
   version "4.0.1"
